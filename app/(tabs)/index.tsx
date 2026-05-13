@@ -1,9 +1,18 @@
 import Buton from "@/src/components/Buton";
 import DataCarousel from "@/src/components/dataCarousel";
+import SectionTema from "@/src/components/sectionTemas";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { View, Image, ScrollView, StyleSheet, Dimensions,Text } from "react-native";
+import {
+  View,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Dimensions,
+  Text,
+  SafeAreaView,
+} from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 
 const width = Dimensions.get("window").width;
@@ -34,9 +43,8 @@ export default function HomePage() {
 
           <Ionicons name="settings" size={28} color="#fff" />
         </View>
-
         <ScrollView
-          horizontal
+          horizontal={true}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.categorias}
         >
@@ -44,10 +52,10 @@ export default function HomePage() {
           <Buton text="Séries" color="rgba(255,255,255,0.08)" />
           <Buton text="Documentários" color="rgba(255,255,255,0.08)" />
           <Buton text="Esportes" color="rgba(255,255,255,0.08)" />
+          <Buton text="Esportes" color="rgba(255,255,255,0.08)" />
         </ScrollView>
 
         <View style={styles.carouselContainer}>
-          <Text>Ola</Text>
           <Carousel
             loop
             width={width}
@@ -58,6 +66,11 @@ export default function HomePage() {
             renderItem={({ item }) => <DataCarousel image={item} />}
           />
         </View>
+        <SectionTema categoria="Drama" />
+        <SectionTema categoria="Series" />
+        <SectionTema categoria="Terror" />
+        <SectionTema categoria="Ação" />
+        <SectionTema categoria="Aventura" />
       </ScrollView>
     </LinearGradient>
   );

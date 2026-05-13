@@ -15,7 +15,6 @@ export default function DataCarousel({ image }: Props) {
       <ImageBackground
         source={{ uri: image }}
         style={styles.image}
-        imageStyle={{ borderRadius: 20 }}
       >
         <View style={styles.overlay}>
           <Text style={styles.title}>TÍTULO DO FILME</Text>
