@@ -1,6 +1,7 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { View } from "react-native";
+import InconBottonNav from "@/src/components/iconBottonNav";
 
 export default function TabLayout() {
   return (
@@ -14,60 +15,30 @@ export default function TabLayout() {
 
           height: 40,
 
-          // overflow: "visible",
+          overflow: "visible",
         },
-
-        tabBarActiveTintColor: "#ff0000",
         tabBarInactiveTintColor: "#999",
+        tabBarShowLabel: false,
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          // title: "Home",
 
           tabBarIcon: ({ focused }) => (
-            <View
-              style={{
-                width: 60,
-                height: 60,
-                borderRadius: 30,
-
-                backgroundColor: focused
-                  ? "#1b2631"
-                  : "rgba:(0,0,0,0)",
-
-                justifyContent: "center",
-                alignItems: "center",
-
-                transform: [
-                  {
-                    translateY: -20,
-                  },
-                ],
-              }}
-            >
-              <Ionicons
-                name={focused ? "home" : "home-outline"}
-                size={28}
-                color="#fff"
-              />
-            </View>
-          )
+            <InconBottonNav stado={focused} icon="home" />
+          ),
         }}
       />
 
       <Tabs.Screen
         name="search"
         options={{
-          title: "Search",
+          // title: "Search",
 
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons
-              name="search"
-              size={size}
-              color={color}
-            />
+          tabBarIcon: ({ focused }) => (
+            <InconBottonNav stado={focused} icon="search" />
           ),
         }}
       />
@@ -75,14 +46,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="catalogo"
         options={{
-          title: "Catalogo",
+          // title: "Catalogo",
 
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons
-              name="book"
-              size={size}
-              color={color}
-            />
+          tabBarIcon: ({ focused }) => (
+            <InconBottonNav stado={focused} icon="book" />
           ),
         }}
       />
