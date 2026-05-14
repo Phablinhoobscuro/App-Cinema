@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
   cartazes: {
     // paddingHorizontal: 10,
     alignItems: "center",
+    gap:5
   },
 
   textLabel: {

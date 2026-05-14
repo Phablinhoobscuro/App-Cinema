@@ -3,6 +3,7 @@ import {
   StyleSheet,
   ImageBackground,
   Text,
+  Dimensions,
 } from "react-native";
 import NivelEstrelas from "./nivelEstelas";
 
@@ -21,15 +22,17 @@ export default function Cartaz() {
     </View>
   );
 }
+const larguraTela = Dimensions.get("window").width;
+const tamanhoCard = (larguraTela-30) / 3;
 
 const styles = StyleSheet.create({
   container: {
-    width: 140,
-    marginRight: 10,
+    width: tamanhoCard,
+    // marginRight: ,
   },
 
   image: {
-    width: 140,
+    // width: tamanhoCard,
     height: 200,
     justifyContent: "flex-end",
     padding: 10,

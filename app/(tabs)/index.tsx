@@ -1,16 +1,12 @@
+import AnimarCard from "@/src/components/AnimarCard";
 import Buton from "@/src/components/Buton";
 import DataCarousel from "@/src/components/dataCarousel";
+import Header from "@/src/components/header";
 import SectionTema from "@/src/components/sectionTemas";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import {
-  View,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Dimensions,
-} from "react-native";
+import { View, Image, ScrollView, StyleSheet, Dimensions } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -31,13 +27,7 @@ export default function HomePage() {
         end={{ x: 1, y: 1 }}
         style={styles.container}
       >
-        <View style={styles.header}>
-          <Image
-            source={require("../../assets/images/icone-filme.png")}
-            style={styles.logo}
-          />
-          <Ionicons name="settings" size={28} color="#fff" />
-        </View>
+        <Header />
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.content}
@@ -67,6 +57,7 @@ export default function HomePage() {
           </View>
           <SectionTema categoria="Drama" />
           <SectionTema categoria="Series" />
+          {/* <AnimarCard /> */}
           <SectionTema categoria="Terror" />
           <SectionTema categoria="Ação" />
           <SectionTema categoria="Aventura" />
@@ -86,25 +77,9 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
 
-  header: {
-    height: 50,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 10,
-    marginBottom: 0,
-    paddingBottom: 0
-  },
-
-  logo: {
-    width: 40,
-    height: 40,
-    resizeMode: "contain",
-  },
-
   categorias: {
     paddingHorizontal: 5,
-    gap: 10,
+    gap: 5,
     marginBottom: 10,
   },
 
