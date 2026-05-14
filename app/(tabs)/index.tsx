@@ -10,10 +10,9 @@ import {
   ScrollView,
   StyleSheet,
   Dimensions,
-  Text,
-  SafeAreaView,
 } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const width = Dimensions.get("window").width;
 
@@ -25,54 +24,55 @@ const images = [
 
 export default function HomePage() {
   return (
-    <LinearGradient
-      colors={["#244b6b", "#08131d", "#030d16"]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={styles.container}
-    >
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.content}
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#030d16" }}>
+      <LinearGradient
+        colors={["#173046", "#08131d", "#030d16"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.container}
       >
         <View style={styles.header}>
           <Image
             source={require("../../assets/images/icone-filme.png")}
             style={styles.logo}
           />
-
           <Ionicons name="settings" size={28} color="#fff" />
         </View>
         <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.categorias}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.content}
         >
-          <Buton text="Filmes" color="rgba(255,255,255,0.08)" />
-          <Buton text="Séries" color="rgba(255,255,255,0.08)" />
-          <Buton text="Documentários" color="rgba(255,255,255,0.08)" />
-          <Buton text="Esportes" color="rgba(255,255,255,0.08)" />
-          <Buton text="Esportes" color="rgba(255,255,255,0.08)" />
-        </ScrollView>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.categorias}
+          >
+            <Buton text="Filmes" color="rgba(255,255,255,0.08)" />
+            <Buton text="Séries" color="rgba(255,255,255,0.08)" />
+            <Buton text="Documentários" color="rgba(255,255,255,0.08)" />
+            <Buton text="Esportes" color="rgba(255,255,255,0.08)" />
+            <Buton text="Esportes" color="rgba(255,255,255,0.08)" />
+          </ScrollView>
 
-        <View style={styles.carouselContainer}>
-          <Carousel
-            loop
-            width={width}
-            height={250}
-            autoPlay
-            data={images}
-            scrollAnimationDuration={1000}
-            renderItem={({ item }) => <DataCarousel image={item} />}
-          />
-        </View>
-        <SectionTema categoria="Drama" />
-        <SectionTema categoria="Series" />
-        <SectionTema categoria="Terror" />
-        <SectionTema categoria="Ação" />
-        <SectionTema categoria="Aventura" />
-      </ScrollView>
-    </LinearGradient>
+          <View style={styles.carouselContainer}>
+            <Carousel
+              loop
+              width={width}
+              height={250}
+              autoPlay
+              data={images}
+              scrollAnimationDuration={1000}
+              renderItem={({ item }) => <DataCarousel image={item} />}
+            />
+          </View>
+          <SectionTema categoria="Drama" />
+          <SectionTema categoria="Series" />
+          <SectionTema categoria="Terror" />
+          <SectionTema categoria="Ação" />
+          <SectionTema categoria="Aventura" />
+        </ScrollView>
+      </LinearGradient>
+    </SafeAreaView>
   );
 }
 
@@ -92,9 +92,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 10,
-    marginBottom: 15,
-    // // position: "absolute",
-    // backgroundColor:"#030d16"
+    marginBottom: 0,
+    paddingBottom: 0
   },
 
   logo: {
@@ -106,7 +105,7 @@ const styles = StyleSheet.create({
   categorias: {
     paddingHorizontal: 5,
     gap: 10,
-    marginBottom: 20,
+    marginBottom: 10,
   },
 
   carouselContainer: {
