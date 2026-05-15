@@ -1,4 +1,4 @@
-import AnimarCard from "@/src/components/AnimarCard";
+import AnimarCard from "@/src/components/animarCard";
 import Buton from "@/src/components/Buton";
 import DataCarousel from "@/src/components/dataCarousel";
 import Header from "@/src/components/header";
@@ -57,7 +57,7 @@ export default function HomePage() {
           </View>
           <SectionTema categoria="Drama" />
           <SectionTema categoria="Series" />
-          {/* <AnimarCard /> */}
+          <AnimarCard />
           <SectionTema categoria="Terror" />
           <SectionTema categoria="Ação" />
           <SectionTema categoria="Aventura" />

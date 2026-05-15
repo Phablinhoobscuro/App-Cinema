@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
 
     transform: [
       {
-        translateY: 0,
+        translateY: -10,
       },
     ],
   },

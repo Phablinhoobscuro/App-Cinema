@@ -1,77 +1,85 @@
-import React, { useRef } from "react";
-import { Animated, View, StyleSheet, Dimensions } from "react-native";
+import React from "react";
+
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  Text,
+  Image
+} from "react-native";
+
+import Carousel from "react-native-reanimated-carousel";
+import Cartaz from "./cartaz";
+import DataCarousel from "./dataCarousel";
 
 const { width } = Dimensions.get("window");
 
-const CARD_WIDTH = width ;
-const SPACING = 20;
-
-const data = [1, 2, 3, 4, 5];
+const images = [
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReXH44XS6NTeQCkM-BPsql_odqZZyzBmR9BQ&s",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThqevjJmu1p28SNaN4-1p7ceHPMIe66g2XxA&s",
+  "https://cdn.cineart.com.br/vibezz_526203857.jpg",
+];
 
 export default function AnimarCard() {
-  const scrollX = useRef(new Animated.Value(0)).current;
-
   return (
-    <Animated.ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      snapToInterval={CARD_WIDTH + SPACING}
-      decelerationRate="fast"
-      contentContainerStyle={{
-        paddingHorizontal: (width - CARD_WIDTH) / 2,
-      }}
-      onScroll={Animated.event(
-        [
-          {
-            nativeEvent: {
-              contentOffset: {
-                x: scrollX,
-              },
-            },
-          },
-        ],
-        { useNativeDriver: true },
-      )}
-      scrollEventThrottle={16}
-    >
-      {data.map((item, index) => {
-        const inputRange = [
-          (index - 1) * (CARD_WIDTH + SPACING),
-          index * (CARD_WIDTH + SPACING),
-          (index + 1) * (CARD_WIDTH + SPACING),
-        ];
+    <View style={styles.container}>
+      <Carousel
+        loop
 
-        const scale = scrollX.interpolate({
-          inputRange,
-          outputRange: [0.85, 1.1, 0.85],
-          extrapolate: "clamp",
-        });
+        width={width * 1}
+        height={600}
 
-        return (
-          <Animated.View
-            key={index}
-            style={[
-              styles.card,
-              {
-                transform: [{ scale }],
-              },
-            ]}
-          />
-        );
-      })}
-    </Animated.ScrollView>
+        data={images}
+
+        style={{
+          width: width,
+          padding:0,
+          margin:0,
+          height:560
+        }}
+
+        pagingEnabled
+        snapEnabled
+
+        mode="parallax"
+
+        modeConfig={{
+          parallaxScrollingScale: 0.85,
+
+          parallaxScrollingOffset: width * 0.40,
+        }}
+
+        renderItem={({ item }) => <Image
+          source={{
+            uri:  item 
+          }}
+
+          style={{
+            width: "100%",
+            height: "100%",
+            borderRadius: 20,
+          }}
+
+          resizeMode="cover"
+        />}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    alignSelf: "center",
+    alignItems: "stretch",
+    justifyContent: "center",
+    // width:width,
+    overflow: "visible",
+  },
+
   card: {
-    width: CARD_WIDTH,
-    height: 250,
-
-    backgroundColor: "#1b2631",
-
-    marginRight: SPACING,
-
-    borderRadius: 20,
+    flex: 1,
+    borderRadius: 25,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

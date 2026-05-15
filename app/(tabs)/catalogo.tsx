@@ -7,7 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function catalogo() {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: "#030d16" }]}>
       <LinearGradient
         colors={["#173046", "#08131d", "#030d16"]}
         start={{ x: 0, y: 0 }}
