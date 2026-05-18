@@ -1,8 +1,9 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Image, Text, StyleSheet, ImageBackground } from "react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useHeaderHeight } from "@react-navigation/elements";
+import NivelEstrelas from "@/src/components/nivelEstelas";
 
 export default function PageComteudo() {
   const { conteudoId } = useLocalSearchParams();
@@ -28,6 +29,14 @@ export default function PageComteudo() {
             headerTintColor: "#fff",
           }}
         />
+        <ImageBackground
+          source={{
+            uri: "https://www.ucicinemas.com.br/Content/Upload/Filmes/Posters/6496/filme_6496.jpg",
+          }}
+          style={styles.img}
+        > <Text style={styles.text}>Os Vingadores</Text>
+          <NivelEstrelas nota={2}/>
+        </ImageBackground>
         <Text>Conteudo {conteudoId}</Text>
       </LinearGradient>
     </SafeAreaView>
@@ -52,4 +61,15 @@ const styles = StyleSheet.create({
   carouselContainer: {
     alignItems: "center",
   },
+
+  img: {
+    height: "100%",
+    alignItems:"flex-start",
+    justifyContent:"flex-end",
+    padding:10
+  },
+  text:{
+    fontSize:20,
+    color:"#ffff"
+  }
 });
