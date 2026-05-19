@@ -1,11 +1,37 @@
 import Buton from "@/src/components/Buton";
 import Header from "@/src/components/header";
 import { LinearGradient } from "expo-linear-gradient";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function catalogo() {
+import { Categorias } from "@/src/types/types";
+import api from "@/src/api/api";
+import { useEffect, useState } from "react";
+
+export default function Catalogo() {
+  const [categorias, setCategorias] = useState<Categorias[]>([]);
+
+  async function categoriasFilmes() {
+    try {
+      const resposta = await api.get("/genre/movie/list", {
+        params: {
+          language: "pt-BR",
+        },
+      });
+
+      setCategorias(resposta.data.genres);
+    } catch (error: any) {
+      Alert.alert(
+        "Erro",
+        `Ocorreu um erro na Buscas dos dados.${error.message}`,
+      );
+    }
+  }
+  useEffect(() => {
+    categoriasFilmes();
+  }, []);
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: "#030d16" }]}>
       <LinearGradient
@@ -14,10 +40,16 @@ export default function catalogo() {
         end={{ x: 1, y: 1 }}
         style={styles.container}
       >
-        <Header/>
+        <Header />
         <Text style={styles.categoria}>Categorias</Text>
         <ScrollView>
-          <Buton text="Filmes" color="rgba(255,255,255,0.08)"/>
+          {categorias?.map((categoria, index) => (
+            <Buton
+              key={index}
+              text={categoria.name}
+              color="rgba(255,255,255,0.08)"
+            />
+          ))}
         </ScrollView>
       </LinearGradient>
     </SafeAreaView>
@@ -27,7 +59,6 @@ export default function catalogo() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
   },
 
   content: {
@@ -35,10 +66,10 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
 
-  categoria:{
-    fontSize:15,
-    fontWeight:"bold",
-    color:"#ffff",
-    marginBottom:5
-  }
+  categoria: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#ffff",
+    marginBottom: 5,
+  },
 });

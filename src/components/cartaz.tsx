@@ -7,19 +7,23 @@ import {
 } from "react-native";
 import NivelEstrelas from "./nivelEstelas";
 import { Link } from "expo-router";
+import { useEffect, useState } from "react";
+import api from "../api/api";
+import { Filme } from "../types/types";
+import post_Filme from "../api/api_post_filem";
 
-export default function Cartaz() {
+export default function Cartaz({ filme }: { filme: Filme }) {
   return (
-      <Link href="/peges/10" asChild>
-      <View  style={styles.container}>
+    <Link href={`/peges/${filme.id}`} asChild>
+      <View style={styles.container}>
         <ImageBackground
           source={{
-            uri: "https://www.ucicinemas.com.br/Content/Upload/Filmes/Posters/6496/filme_6496.jpg",
+            uri: post_Filme(filme.poster_path),
           }}
           style={styles.image}
         >
-          <Text style={styles.title}>Titulo</Text>
-          <NivelEstrelas nota={3} />
+          <Text style={styles.title}>{filme.original_title}</Text>
+          <NivelEstrelas nota={filme.vote_average} />
         </ImageBackground>
       </View>
     </Link>

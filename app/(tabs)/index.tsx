@@ -1,12 +1,23 @@
+import api from "@/src/api/api";
+import post_Filme from "@/src/api/api_post_filem";
 import AnimarCard from "@/src/components/animarCard";
 import Buton from "@/src/components/Buton";
 import DataCarousel from "@/src/components/dataCarousel";
 import Header from "@/src/components/header";
 import SectionTema from "@/src/components/sectionTemas";
+import { Categorias, Filme } from "@/src/types/types";
 import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
-import { View, Image, ScrollView, StyleSheet, Dimensions } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Dimensions,
+  Alert,
+} from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -17,8 +28,77 @@ const images = [
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThqevjJmu1p28SNaN4-1p7ceHPMIe66g2XxA&s",
   "https://cdn.cineart.com.br/vibezz_526203857.jpg",
 ];
+// Lista de categoris e seu id:
+// | Categoria         | ID    |
+// | ----------------- | ----- |
+// | Ação              | 28    |
+// | Aventura          | 12    |
+// | Animação          | 16    |
+// | Comédia           | 35    |
+// | Crime             | 80    |
+// | Documentário      | 99    |
+// | Drama             | 18    |
+// | Família           | 10751 |
+// | Fantasia          | 14    |
+// | História          | 36    |
+// | Terror            | 27    |
+// | Música            | 10402 |
+// | Mistério          | 9648  |
+// | Romance           | 10749 |
+// | Ficção Científica | 878   |
+// | Thriller          | 53    |
 
 export default function HomePage() {
+  const [categorias, setCategorias] = useState<Categorias[]>([]);
+  const [lancamentos,setLancamentos] =  useState<Filme[]>([]);
+
+  const listaCategorias = [28, 16, 35, 80, 99];
+
+  async function lancamentosFilmes() {
+    try {
+      const resposta = await api.get("/movie/now_playing", {
+        params: {
+          language: "pt-BR",
+          page: 1,
+        },
+      });
+
+      setLancamentos(resposta.data.results);
+    } catch (error: any) {
+      Alert.alert(
+        "Erro",
+        `Ocorreu um erro na Buscas dos dados.${error.message}`,
+      );
+    }
+  }
+
+  async function categoriasFilmes() {
+    try {
+      const resposta = await api.get("/genre/movie/list", {
+        params: {
+          language: "pt-BR",
+        },
+      });
+
+      const categoriasFinais = resposta.data.genres.filter((c: any) =>
+        listaCategorias.some((cc) => cc === c.id),
+      );
+
+      setCategorias(categoriasFinais);
+      console.log(categoriasFinais);
+    } catch (error: any) {
+      Alert.alert(
+        "Erro",
+        `Ocorreu um erro na Buscas dos dados.${error.message}`,
+      );
+    }
+  }
+
+  useEffect(() => {
+    lancamentosFilmes();
+    categoriasFilmes();
+  }, []);
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#030d16" }}>
       <LinearGradient
@@ -37,11 +117,13 @@ export default function HomePage() {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.categorias}
           >
-            <Buton text="Filmes" color="rgba(255,255,255,0.08)" />
-            <Buton text="Séries" color="rgba(255,255,255,0.08)" />
-            <Buton text="Documentários" color="rgba(255,255,255,0.08)" />
-            <Buton text="Esportes" color="rgba(255,255,255,0.08)" />
-            <Buton text="Esportes" color="rgba(255,255,255,0.08)" />
+            {categorias?.map((categoria, index) => (
+              <Buton
+                key={index}
+                text={categoria.name}
+                color="rgba(255,255,255,0.08)"
+              />
+            ))}
           </ScrollView>
 
           <View style={styles.carouselContainer}>
@@ -50,17 +132,26 @@ export default function HomePage() {
               width={width}
               height={250}
               autoPlay
-              data={images}
+              data={lancamentos}
               scrollAnimationDuration={1000}
-              renderItem={({ item }) => <DataCarousel image={item} />}
+              renderItem={({ item }) => <DataCarousel filme={item} />}
             />
           </View>
-          <SectionTema categoria="Drama" />
+          {categorias &&
+            categorias.map((element, index) => (
+              <SectionTema
+                key={index}
+                categoria={element.id}
+                nome={element.name}
+              />
+            ))}
+
+          {/* <SectionTema categoria="Drama" />
           <SectionTema categoria="Series" />
           <AnimarCard />
           <SectionTema categoria="Terror" />
           <SectionTema categoria="Ação" />
-          <SectionTema categoria="Aventura" />
+          <SectionTema categoria="Aventura" /> */}
         </ScrollView>
       </LinearGradient>
     </SafeAreaView>

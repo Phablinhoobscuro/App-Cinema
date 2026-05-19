@@ -1,12 +1,53 @@
+import api from "@/src/api/api";
 import Cartaz from "@/src/components/cartaz";
 import Header from "@/src/components/header";
+import { Filme } from "@/src/types/types";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { View, TextInput, StyleSheet } from "react-native";
+import { useEffect, useState } from "react";
+import { View, TextInput, StyleSheet, Alert } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Search() {
+  const [repostaPesquisa, setRespostaPesquisa] = useState<Filme[]>([]);
+  async function buscarFilme(p?: string) {
+    try {
+      const response = await api.get("/search/movie", {
+        params: {
+          query: p,
+          language: "pt-BR",
+        },
+      });
+      setRespostaPesquisa(response.data.results);
+      console.log(response.data.results);
+    } catch (erro) {
+      console.log(erro);
+    }
+  }
+  const [lancamentos, setLancamentos] = useState<Filme[]>([]);
+  async function lancamentosFilmes() {
+    try {
+      const resposta = await api.get("/movie/now_playing", {
+        params: {
+          language: "pt-BR",
+          page: 1,
+        },
+      });
+
+      setLancamentos(resposta.data.results);
+    } catch (error: any) {
+      Alert.alert(
+        "Erro",
+        `Ocorreu um erro na Buscas dos dados.${error.message}`,
+      );
+    }
+  }
+  useEffect(() => {
+    buscarFilme();
+    lancamentosFilmes();
+  }, []);
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: "#030d16" }]}>
       <LinearGradient
@@ -23,21 +64,17 @@ export default function Search() {
             placeholder="Pesquisar..."
             placeholderTextColor="#aaa"
             style={styles.input}
+            onChangeText={(e) => buscarFilme(e)}
           />
         </View>
         <ScrollView contentContainerStyle={styles.resultadoPesquisa}>
-          <Cartaz />
-          <Cartaz />
-          <Cartaz />
-          <Cartaz />
-          <Cartaz />
-          <Cartaz />
-          <Cartaz />
-          <Cartaz />
-          <Cartaz />
-          <Cartaz />
-          <Cartaz />
-          <Cartaz />
+          {repostaPesquisa && repostaPesquisa.length > 0
+            ? repostaPesquisa.map((filme, index) => (
+                <Cartaz key={index} filme={filme} />
+              ))
+            : lancamentos.map((filme, index) => (
+                <Cartaz key={index} filme={filme} />
+              ))}
         </ScrollView>
       </LinearGradient>
     </SafeAreaView>

@@ -4,10 +4,31 @@ import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useHeaderHeight } from "@react-navigation/elements";
 import NivelEstrelas from "@/src/components/nivelEstelas";
+import post_Filme from "@/src/api/api_post_filem";
+import api from "@/src/api/api";
+import { useEffect, useState } from "react";
+import { Filme } from "@/src/types/types";
 
 export default function PageComteudo() {
   const { conteudoId } = useLocalSearchParams();
   const headerHeight = useHeaderHeight();
+
+  const [filme, setFilme] = useState<Filme|null>(null);
+
+  useEffect(() => {
+    async function buscarFilme() {
+      try {
+        const response = await api.get(`/movie/${conteudoId}`);
+
+        setFilme(response.data.results);
+      } catch (erro) {
+        console.log(erro);
+      }
+    }
+
+    buscarFilme();
+  }, []);
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#030d16" }}>
       <LinearGradient
@@ -31,11 +52,13 @@ export default function PageComteudo() {
         />
         <ImageBackground
           source={{
-            uri: "https://www.ucicinemas.com.br/Content/Upload/Filmes/Posters/6496/filme_6496.jpg",
+            uri: post_Filme(filme?.poster_path),
           }}
           style={styles.img}
-        > <Text style={styles.text}>Os Vingadores</Text>
-          <NivelEstrelas nota={2}/>
+        >
+          {" "}
+          <Text style={styles.text}>Os Vingadores</Text>
+          <NivelEstrelas nota={2} />
         </ImageBackground>
         <Text>Conteudo {conteudoId}</Text>
       </LinearGradient>
@@ -64,12 +87,12 @@ const styles = StyleSheet.create({
 
   img: {
     height: "100%",
-    alignItems:"flex-start",
-    justifyContent:"flex-end",
-    padding:10
+    alignItems: "flex-start",
+    justifyContent: "flex-end",
+    padding: 10,
   },
-  text:{
-    fontSize:20,
-    color:"#ffff"
-  }
+  text: {
+    fontSize: 20,
+    color: "#ffff",
+  },
 });

@@ -1,27 +1,18 @@
-import {
-  View,
-  Text,
-  ImageBackground,
-  StyleSheet,
-} from "react-native";
+import { View, Text, ImageBackground, StyleSheet } from "react-native";
+import { Filme } from "../types/types";
+import post_Filme from "../api/api_post_filem";
 
 type Props = {
   image: string;
 };
 
-export default function DataCarousel({ image }: Props) {
+export default function DataCarousel({ filme }: { filme: Filme }) {
   return (
-    <View >
-      <ImageBackground
-        source={{ uri: image }}
-        style={styles.image}
-      >
+    <View>
+      <ImageBackground source={{ uri: post_Filme(filme.backdrop_path) }} style={styles.image}>
         <View style={styles.overlay}>
-          <Text style={styles.title}>TÍTULO DO FILME</Text>
-          <Text style={styles.subtitle}>Subtítulo</Text>
-          <Text style={styles.description}>
-            Descrição do filme
-          </Text>
+          <Text style={styles.title}>{filme.title}</Text>
+          <Text style={styles.subtitle}>{filme.overview}</Text>
         </View>
       </ImageBackground>
     </View>
@@ -51,7 +42,7 @@ const styles = StyleSheet.create({
 
   subtitle: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 10,
   },
 
   description: {
