@@ -20,7 +20,6 @@ export default function Search() {
         },
       });
       setRespostaPesquisa(response.data.results);
-      console.log(response.data.results);
     } catch (erro) {
       console.log(erro);
     }

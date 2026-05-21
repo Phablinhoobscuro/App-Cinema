@@ -14,7 +14,7 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import { Stack, useLocalSearchParams } from "expo-router";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { useHeaderHeight } from "@react-navigation/elements";
 
@@ -27,6 +27,9 @@ import { Filme } from "@/src/types/types";
 import post_Filme from "@/src/api/api_post_filem";
 
 import NivelEstrelas from "@/src/components/nivelEstelas";
+
+
+import YoutubePlayer from "react-native-youtube-iframe";
 
 const { width } = Dimensions.get("window");
 
@@ -65,6 +68,10 @@ export default function PageComteudo() {
         setLoading(false);
 
       }
+    }
+
+    async function video() {
+
     }
 
     buscarFilme();
@@ -156,17 +163,12 @@ export default function PageComteudo() {
             Trailer
           </Text>
 
-          <Video
-            ref={video}
-            style={styles.video}
-            source={{
-              uri: "https://www.w3schools.com/html/mov_bbb.mp4",
-            }}
-            useNativeControls
-            resizeMode={ResizeMode.COVER}
-            shouldPlay
-            isLooping
-          />
+
+          {/* <YoutubePlayer
+            height={300}
+            play={true}
+            videoId={"dQw4w9WgXcQ"}
+          /> */}
 
           <Text style={styles.sectionTitle}>
             Informações

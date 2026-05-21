@@ -1,18 +1,13 @@
 import api from "@/src/api/api";
-import post_Filme from "@/src/api/api_post_filem";
-import AnimarCard from "@/src/components/animarCard";
 import Buton from "@/src/components/Buton";
 import DataCarousel from "@/src/components/dataCarousel";
 import Header from "@/src/components/header";
 import SectionTema from "@/src/components/sectionTemas";
 import { Categorias, Filme } from "@/src/types/types";
-import { Ionicons } from "@expo/vector-icons";
-import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import {
   View,
-  Image,
   ScrollView,
   StyleSheet,
   Dimensions,
@@ -23,11 +18,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const width = Dimensions.get("window").width;
 
-const images = [
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReXH44XS6NTeQCkM-BPsql_odqZZyzBmR9BQ&s",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThqevjJmu1p28SNaN4-1p7ceHPMIe66g2XxA&s",
-  "https://cdn.cineart.com.br/vibezz_526203857.jpg",
-];
 // Lista de categoris e seu id:
 // | Categoria         | ID    |
 // | ----------------- | ----- |
@@ -85,7 +75,7 @@ export default function HomePage() {
       );
 
       setCategorias(categoriasFinais);
-      console.log(categoriasFinais);
+    
     } catch (error: any) {
       Alert.alert(
         "Erro",

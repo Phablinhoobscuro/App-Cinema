@@ -22,7 +22,6 @@ export default function SectionTema({
         },
       });
       setFilmes(response.data.results);
-      console.log(response.data.results);
     } catch (erro) {
       console.log(erro);
     }
