@@ -21,7 +21,7 @@ export default function Cartaz({ filme }: { filme: Filme }) {
       </SafeAreaView >)
   }
   return (
-    <Link href={`/peges/${filme.id}`} asChild>
+    <Link href={`/peges/conteudo/${filme.id}`} asChild>
       <TouchableOpacity>
         <View style={styles.container}>
           <ImageBackground

@@ -113,7 +113,8 @@ const styles = StyleSheet.create({
   resultadoPesquisa: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 5,
-    padding: 10,
+    justifyContent: "space-between",
+    gap: 2,
+    paddingHorizontal:8
   },
 });

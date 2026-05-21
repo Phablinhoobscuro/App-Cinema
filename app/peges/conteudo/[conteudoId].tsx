@@ -14,11 +14,9 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import { Stack, useLocalSearchParams } from "expo-router";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useHeaderHeight } from "@react-navigation/elements";
-
-import { Video, ResizeMode } from "expo-av";
 
 import api from "@/src/api/api";
 
@@ -27,7 +25,6 @@ import { Filme } from "@/src/types/types";
 import post_Filme from "@/src/api/api_post_filem";
 
 import NivelEstrelas from "@/src/components/nivelEstelas";
-
 
 import YoutubePlayer from "react-native-youtube-iframe";
 
@@ -43,7 +40,7 @@ export default function PageComteudo() {
 
   const [loading, setLoading] = useState(true);
 
-  const video = useRef<Video>(null);
+  const [trailerKey, setTrailerKey] = useState("");
 
   useEffect(() => {
 
@@ -51,6 +48,7 @@ export default function PageComteudo() {
 
       try {
 
+        // Buscar detalhes do filme
         const response = await api.get(`/movie/${conteudoId}`, {
           params: {
             language: "pt-BR",
@@ -58,6 +56,22 @@ export default function PageComteudo() {
         });
 
         setFilme(response.data);
+
+        // Buscar vídeos/trailers
+        const videosResponse = await api.get(
+          `/movie/${conteudoId}/videos`
+        );
+
+        // Procurar trailer oficial do YouTube
+        const trailer = videosResponse.data.results.find(
+          (video: any) =>
+            video.site === "YouTube" &&
+            video.type === "Trailer"
+        );
+
+        if (trailer) {
+          setTrailerKey(trailer.key);
+        }
 
       } catch (erro) {
 
@@ -68,10 +82,6 @@ export default function PageComteudo() {
         setLoading(false);
 
       }
-    }
-
-    async function video() {
-
     }
 
     buscarFilme();
@@ -163,12 +173,17 @@ export default function PageComteudo() {
             Trailer
           </Text>
 
-
-          {/* <YoutubePlayer
-            height={300}
-            play={true}
-            videoId={"dQw4w9WgXcQ"}
-          /> */}
+          {trailerKey ? (
+            <YoutubePlayer
+              height={220}
+              play={false}
+              videoId={trailerKey}
+            />
+          ) : (
+            <Text style={styles.noTrailer}>
+              Trailer não disponível
+            </Text>
+          )}
 
           <Text style={styles.sectionTitle}>
             Informações
@@ -264,14 +279,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
-  video: {
-    width: width - 40,
-    height: 220,
-    borderRadius: 20,
-    marginTop: 10,
-    backgroundColor: "#111",
-  },
-
   cardInfo: {
     backgroundColor: "rgba(255,255,255,0.05)",
     borderRadius: 20,
@@ -283,6 +290,11 @@ const styles = StyleSheet.create({
   infoText: {
     color: "#fff",
     fontSize: 15,
+  },
+
+  noTrailer: {
+    color: "#999",
+    marginTop: 10,
   },
 
 });

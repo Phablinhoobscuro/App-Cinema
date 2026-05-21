@@ -1,13 +1,14 @@
 import Buton from "@/src/components/Buton";
 import Header from "@/src/components/header";
 import { LinearGradient } from "expo-linear-gradient";
-import { View, Text, StyleSheet, Alert } from "react-native";
+import { View, Text, StyleSheet, Alert, TouchableOpacity } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Categorias } from "@/src/types/types";
 import api from "@/src/api/api";
 import { useEffect, useState } from "react";
+import { Link } from "expo-router";
 
 export default function Catalogo() {
   const [categorias, setCategorias] = useState<Categorias[]>([]);
@@ -42,13 +43,13 @@ export default function Catalogo() {
       >
         <Header />
         <Text style={styles.categoria}>Categorias</Text>
-        <ScrollView>
+        <ScrollView showsHorizontalScrollIndicator={false}>
           {categorias?.map((categoria, index) => (
-            <Buton
-              key={index}
-              text={categoria.name}
-              color="rgba(255,255,255,0.08)"
-            />
+            <Link key={index} href={`/peges/categorias/${categoria.id}`} asChild>
+              <TouchableOpacity key={index}>
+                <Buton text={categoria.name} color="rgba(255,255,255,0.08)" />
+              </TouchableOpacity>
+            </Link>
           ))}
         </ScrollView>
       </LinearGradient>
