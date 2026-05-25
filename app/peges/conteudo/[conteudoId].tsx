@@ -102,6 +102,7 @@ export default function PageComteudo() {
 
       <Stack.Screen
         options={{
+          headerShown: true,
           headerTransparent: true,
           headerTintColor: "#fff",
           title: filme?.title || "Detalhes",
