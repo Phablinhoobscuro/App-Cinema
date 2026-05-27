@@ -10,7 +10,8 @@ export default function Layout() {
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="./peges/categorias/[categoriasId]" />
       <Stack.Screen name="./peges/conteudo/[conteudoId]" />
-      
+      <Stack.Screen name="./(user)/user"/>
+      <Stack.Screen name="./(user)/favoritos"/>
     </Stack>
   );
 }

@@ -31,7 +31,7 @@ export default function Cartaz({ filme }: { filme: Filme }) {
             style={styles.image}
           >
             <Text style={styles.title}>{filme.original_title}</Text>
-            <NivelEstrelas nota={filme.vote_average} />
+            {/* <NivelEstrelas nota={filme.vote_average} /> */}
           </ImageBackground>
         </View>
       </TouchableOpacity>
@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: "#fff",
+    
     fontSize: 14,
     fontWeight: "bold",
   },

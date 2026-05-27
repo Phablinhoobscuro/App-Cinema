@@ -6,13 +6,7 @@ import SectionTema from "@/src/components/sectionTemas";
 import { Categorias, Filme } from "@/src/types/types";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-  Dimensions,
-  Alert,
-} from "react-native";
+import { View, ScrollView, StyleSheet, Dimensions, Alert } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -40,7 +34,7 @@ const width = Dimensions.get("window").width;
 
 export default function HomePage() {
   const [categorias, setCategorias] = useState<Categorias[]>([]);
-  const [lancamentos,setLancamentos] =  useState<Filme[]>([]);
+  const [lancamentos, setLancamentos] = useState<Filme[]>([]);
 
   const listaCategorias = [28, 16, 35, 80, 99];
 
@@ -75,7 +69,6 @@ export default function HomePage() {
       );
 
       setCategorias(categoriasFinais);
-    
     } catch (error: any) {
       Alert.alert(
         "Erro",
@@ -121,9 +114,10 @@ export default function HomePage() {
               loop
               width={width}
               height={250}
-              autoPlay
-              data={lancamentos}
+              autoPlay={true}
+              autoPlayInterval={5000}
               scrollAnimationDuration={1000}
+              data={lancamentos}
               renderItem={({ item }) => <DataCarousel filme={item} />}
             />
           </View>

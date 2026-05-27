@@ -6,6 +6,7 @@ import {
   ScrollView,
   Dimensions,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -28,6 +29,8 @@ import NivelEstrelas from "@/src/components/nivelEstelas";
 
 import YoutubePlayer from "react-native-youtube-iframe";
 
+import { Ionicons } from "@expo/vector-icons";
+
 const { width } = Dimensions.get("window");
 
 export default function PageComteudo() {
@@ -41,6 +44,8 @@ export default function PageComteudo() {
   const [loading, setLoading] = useState(true);
 
   const [trailerKey, setTrailerKey] = useState("");
+
+  const [favorito, setFavorito] = useState(false);
 
   useEffect(() => {
 
@@ -126,6 +131,18 @@ export default function PageComteudo() {
             { paddingTop: headerHeight },
           ]}
         >
+
+          {/* BOTÃO FAVORITO */}
+          <TouchableOpacity
+            style={styles.favoriteButton}
+            onPress={() => setFavorito(!favorito)}
+          >
+            <Ionicons
+              name={favorito ? "heart" : "heart-outline"}
+              size={30}
+              color={favorito ? "#45617eff" : "#fff"}
+            />
+          </TouchableOpacity>
 
           <LinearGradient
             colors={[
@@ -296,6 +313,20 @@ const styles = StyleSheet.create({
   noTrailer: {
     color: "#999",
     marginTop: 10,
+  },
+
+  /* FAVORITO */
+  favoriteButton: {
+    position: "absolute",
+    top: 60,
+    right: 20,
+    zIndex: 10,
+    backgroundColor: "rgba(0,0,0,0.45)",
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    justifyContent: "center",
+    alignItems: "center",
   },
 
 });

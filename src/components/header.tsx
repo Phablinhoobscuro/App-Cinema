@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { Link } from "expo-router";
 import { View, Image, StyleSheet } from "react-native";
 
 export default function Header() {
@@ -8,7 +9,9 @@ export default function Header() {
         source={require("../../assets/images/icone-filme.png")}
         style={styles.logo}
       />
-      <Ionicons name="settings" size={28} color="#fff" />
+      <Link href={"./user"}>
+        <Ionicons name="settings" size={28} color="#fff" />
+      </Link>
     </View>
   );
 }
