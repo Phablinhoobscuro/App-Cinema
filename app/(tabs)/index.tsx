@@ -1,4 +1,5 @@
 import api from "@/src/api/api";
+import AnimarCard from "@/src/components/animarCard";
 import Buton from "@/src/components/Buton";
 import DataCarousel from "@/src/components/dataCarousel";
 import Header from "@/src/components/header";
@@ -129,6 +130,7 @@ export default function HomePage() {
                 nome={element.name}
               />
             ))}
+          <AnimarCard />
 
           {/* <SectionTema categoria="Drama" />
           <SectionTema categoria="Series" />

@@ -9,7 +9,7 @@ export default function Header() {
         source={require("../../assets/images/icone-filme.png")}
         style={styles.logo}
       />
-      <Link href={"./user"}>
+      <Link href={"/(user)/user"}>
         <Ionicons name="settings" size={28} color="#fff" />
       </Link>
     </View>
