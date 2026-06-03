@@ -22,14 +22,23 @@ import { Filme } from "@/src/types/types";
 
 import Cartaz from "@/src/components/cartaz";
 import { Ionicons } from "@expo/vector-icons";
+import apiFilmes from "@/src/api/apiFilmes";
 
 type Categoria = {
   id: number;
   name: string;
 };
 
+type Favoritos = {
+    id: string,
+    filmeId: string,
+    usuarioId: string,
+    dataCriacao: string,
+    dataAtualizacao: string
+  };
+
 export default function CategoriaPage() {
-  const { categoriasId } = useLocalSearchParams();
+  const { usuario, setUsuario } = useContext(AuthContext);
 
   const headerHeight = useHeaderHeight();
 
@@ -39,41 +48,30 @@ export default function CategoriaPage() {
 
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function carregarDados() {
-      try {
-        // Buscar categorias
-        const respostaCategorias = await api.get("/genre/movie/list", {
-          params: {
-            language: "pt-BR",
-          },
-        });
+  async function BuscarListaFavoritos() {
+    try {
+      const resposta = await apiFilmes.get<Favoritos[]>(`/favoritos/listFavoritosUsuario/${usuario.id}`);
 
-        // Encontrar categoria atual
-        const categoriaEncontrada = respostaCategorias.data.genres.find(
-          (item: Categoria) => item.id === Number(categoriasId),
-        );
-
-        setCategoria(categoriaEncontrada);
-
-        // Buscar filmes da categoria
-        const respostaFilmes = await api.get("/discover/movie", {
-          params: {
-            with_genres: categoriasId,
-            language: "pt-BR",
-          },
-        });
-
-        setFilmes(respostaFilmes.data.results);
-      } catch (error: any) {
-        Alert.alert("Erro", error?.message || "Erro ao carregar dados.");
-      } finally {
-        setLoading(false);
+      if(resposta.data.length > 0){
+        resposta.data.map(()=)
+        setFilmes()
       }
+    } catch (error) {
+      
     }
+  }
 
-    carregarDados();
-  }, [categoriasId]);
+  async function BuscarFilme(id:string) {
+    try {
+      const reposta = await api.get(`/movie/${id}`)
+      return reposta.data
+    } catch (error) {
+      return
+    }
+  }
+  useEffect(()=>{
+     
+  },[])
 
   // Loading
   if (loading) {

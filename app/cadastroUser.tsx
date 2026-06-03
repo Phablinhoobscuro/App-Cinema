@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -9,49 +9,43 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { router, Stack } from "expo-router";
+import { router } from "expo-router";
 import apiFilmes from "@/src/api/apiFilmes";
-import { AuthContext, User } from "@/src/contexts/userContexts";
 
-export default function LoginScreen() {
+export default function CadastroUsuario() {
+  const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
-  const { usuario, setUsuario } = useContext(AuthContext);
-
-  async function fazerLogin() {
-    if (!email || !senha) {
+  async function cadastrar() {
+    if (!nome || !email || !senha) {
       Alert.alert("Atenção", "Preencha todos os campos.");
-      //   router.push("/(tabs)");
       return;
     }
 
-    const reposta = await apiFilmes.post<User>("/user/login", {
-      email,
-      senha,
-    });
+    try {
+      // Exemplo da chamada para API
 
-    if (reposta.data.id) {
-      Alert.alert("Login realizado com sucesso!");
-      setUsuario({
-        id: reposta.data.id,
-        nome: reposta.data.nome,
-        email: reposta.data.email,
+      await apiFilmes.post("/user", {
+        nome,
+        email,
+        senha,
       });
 
-      router.push("/(tabs)");
-    } else {
-      Alert.alert("Erro", "E-mail ou senha inválidos.");
+
+      Alert.alert(
+        "Sucesso",
+        "Usuário cadastrado com sucesso!"
+      );
+
+      router.replace("/");
+    } catch (error: any) {
+      Alert.alert(
+        "Erro",
+        error?.response?.data?.message ||
+          "Erro ao cadastrar usuário."
+      );
     }
-  }
-
-  function recuperarSenha() {
-    Alert.alert("Recuperação de Senha");
-  }
-
-  function cadastrar() {
-    Alert.alert("Cadastro");
-    router.push("/cadastroUser");
   }
 
   return (
@@ -63,12 +57,21 @@ export default function LoginScreen() {
         style={styles.container}
       >
         <View style={styles.content}>
-          <Text style={styles.title}>CineFlix</Text>
+          <Text style={styles.title}>Criar Conta</Text>
+
           <Text style={styles.subtitle}>
-            Entre para acessar seus filmes favoritos
+            Cadastre-se para acessar filmes e séries
           </Text>
 
           <View style={styles.form}>
+            <TextInput
+              placeholder="Nome completo"
+              placeholderTextColor="#8FA3B8"
+              value={nome}
+              onChangeText={setNome}
+              style={styles.input}
+            />
+
             <TextInput
               placeholder="E-mail"
               placeholderTextColor="#8FA3B8"
@@ -88,16 +91,21 @@ export default function LoginScreen() {
               style={styles.input}
             />
 
-            <TouchableOpacity style={styles.loginButton} onPress={fazerLogin}>
-              <Text style={styles.loginText}>Entrar</Text>
+            <TouchableOpacity
+              style={styles.registerButton}
+              onPress={cadastrar}
+            >
+              <Text style={styles.registerText}>
+                Criar Conta
+              </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={recuperarSenha}>
-              <Text style={styles.linkText}>Esqueci minha senha</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.registerButton} onPress={cadastrar}>
-              <Text style={styles.registerText}>Criar Conta</Text>
+            <TouchableOpacity
+              onPress={() => router.back()}
+            >
+              <Text style={styles.loginLink}>
+                Já possui uma conta? Entrar
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -124,14 +132,14 @@ const styles = StyleSheet.create({
 
   title: {
     color: "#FFF",
-    fontSize: 38,
+    fontSize: 34,
     fontWeight: "bold",
     textAlign: "center",
   },
 
   subtitle: {
     color: "#B5C7D8",
-    fontSize: 16,
+    fontSize: 15,
     textAlign: "center",
   },
 
@@ -150,7 +158,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
-  loginButton: {
+  registerButton: {
     backgroundColor: "#1E88E5",
     height: 55,
     borderRadius: 15,
@@ -159,32 +167,16 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 
-  loginText: {
+  registerText: {
     color: "#FFF",
     fontSize: 17,
     fontWeight: "bold",
   },
 
-  linkText: {
-    color: "#5DADE2",
+  loginLink: {
     textAlign: "center",
+    color: "#5DADE2",
+    marginTop: 10,
     fontSize: 15,
-    marginTop: 10,
-  },
-
-  registerButton: {
-    marginTop: 10,
-    borderWidth: 1,
-    borderColor: "#1E88E5",
-    height: 55,
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  registerText: {
-    color: "#1E88E5",
-    fontSize: 16,
-    fontWeight: "600",
   },
 });

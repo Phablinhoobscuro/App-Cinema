@@ -7,6 +7,7 @@ import {
   Dimensions,
   ActivityIndicator,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -15,7 +16,7 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import { Stack, useLocalSearchParams } from "expo-router";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { useHeaderHeight } from "@react-navigation/elements";
 
@@ -30,10 +31,21 @@ import NivelEstrelas from "@/src/components/nivelEstelas";
 import YoutubePlayer from "react-native-youtube-iframe";
 
 import { Ionicons } from "@expo/vector-icons";
+import apiFilmes from "@/src/api/apiFilmes";
+import { AuthContext } from "@/src/contexts/userContexts";
 
 const { width } = Dimensions.get("window");
 
+type Favorito = {
+  id: string;
+  filmeId: string;
+  usuarioId: string;
+  dataCriacao: string;
+  dataAtualizacao: string;
+};
+
 export default function PageComteudo() {
+  const { usuario, setUsuario } = useContext(AuthContext);
 
   const { conteudoId } = useLocalSearchParams();
 
@@ -47,12 +59,36 @@ export default function PageComteudo() {
 
   const [favorito, setFavorito] = useState(false);
 
+  async function stadoFavorito() {
+    try {
+      const resposta = await apiFilmes.get<Favorito>(
+        `/favoritos/${usuario?.id}/${conteudoId}`,
+      );
+      if (resposta.data.id) {
+        setFavorito(true);
+      }
+    } catch (e) {
+      return;
+    }
+  }
+
+  async function addFavoritos() {
+    try {
+      const resposta = await apiFilmes.post("/favoritos", {
+        usuarioId: usuario?.id,
+        filmeId: conteudoId,
+      });
+
+      if (resposta.data.id) {
+        setFavorito(!favorito);
+      }
+    } catch (e: any) {
+      Alert.alert("Erro", e.response?.data?.message || e.message);
+    }
+  }
   useEffect(() => {
-
     async function buscarFilme() {
-
       try {
-
         // Buscar detalhes do filme
         const response = await api.get(`/movie/${conteudoId}`, {
           params: {
@@ -63,34 +99,25 @@ export default function PageComteudo() {
         setFilme(response.data);
 
         // Buscar vídeos/trailers
-        const videosResponse = await api.get(
-          `/movie/${conteudoId}/videos`
-        );
+        const videosResponse = await api.get(`/movie/${conteudoId}/videos`);
 
         // Procurar trailer oficial do YouTube
         const trailer = videosResponse.data.results.find(
-          (video: any) =>
-            video.site === "YouTube" &&
-            video.type === "Trailer"
+          (video: any) => video.site === "YouTube" && video.type === "Trailer",
         );
 
         if (trailer) {
           setTrailerKey(trailer.key);
         }
-
       } catch (erro) {
-
         console.log(erro);
-
       } finally {
-
         setLoading(false);
-
       }
     }
 
     buscarFilme();
-
+    stadoFavorito();
   }, [conteudoId]);
 
   if (loading) {
@@ -102,9 +129,7 @@ export default function PageComteudo() {
   }
 
   return (
-
     <SafeAreaView style={styles.safe}>
-
       <Stack.Screen
         options={{
           headerShown: true,
@@ -114,11 +139,7 @@ export default function PageComteudo() {
         }}
       />
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={styles.container}
-      >
-
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         <ImageBackground
           source={{
             uri: filme?.backdrop_path
@@ -126,16 +147,12 @@ export default function PageComteudo() {
               : undefined,
           }}
           resizeMode="cover"
-          style={[
-            styles.banner,
-            { paddingTop: headerHeight },
-          ]}
+          style={[styles.banner, { paddingTop: headerHeight }]}
         >
-
           {/* BOTÃO FAVORITO */}
           <TouchableOpacity
             style={styles.favoriteButton}
-            onPress={() => setFavorito(!favorito)}
+            onPress={() => addFavoritos()}
           >
             <Ionicons
               name={favorito ? "heart" : "heart-outline"}
@@ -145,70 +162,39 @@ export default function PageComteudo() {
           </TouchableOpacity>
 
           <LinearGradient
-            colors={[
-              "transparent",
-              "rgba(3,13,22,0.8)",
-              "#030d16",
-            ]}
+            colors={["transparent", "rgba(3,13,22,0.8)", "#030d16"]}
             style={styles.overlay}
           >
+            <Text style={styles.title}>{filme?.title}</Text>
 
-            <Text style={styles.title}>
-              {filme?.title}
-            </Text>
-
-            <NivelEstrelas
-              nota={filme?.vote_average || 0}
-            />
+            <NivelEstrelas nota={filme?.vote_average || 0} />
 
             <View style={styles.infoContainer}>
-
-              <Text style={styles.data}>
-                📅 {filme?.release_date}
-              </Text>
+              <Text style={styles.data}>📅 {filme?.release_date}</Text>
 
               <Text style={styles.data}>
                 ⭐ {filme?.vote_average?.toFixed(1)}
               </Text>
-
             </View>
-
           </LinearGradient>
-
         </ImageBackground>
 
         <View style={styles.content}>
+          <Text style={styles.sectionTitle}>Sinopse</Text>
 
-          <Text style={styles.sectionTitle}>
-            Sinopse
-          </Text>
+          <Text style={styles.overview}>{filme?.overview}</Text>
 
-          <Text style={styles.overview}>
-            {filme?.overview}
-          </Text>
-
-          <Text style={styles.sectionTitle}>
-            Trailer
-          </Text>
+          <Text style={styles.sectionTitle}>Trailer</Text>
 
           {trailerKey ? (
-            <YoutubePlayer
-              height={220}
-              play={false}
-              videoId={trailerKey}
-            />
+            <YoutubePlayer height={220} play={false} videoId={trailerKey} />
           ) : (
-            <Text style={styles.noTrailer}>
-              Trailer não disponível
-            </Text>
+            <Text style={styles.noTrailer}>Trailer não disponível</Text>
           )}
 
-          <Text style={styles.sectionTitle}>
-            Informações
-          </Text>
+          <Text style={styles.sectionTitle}>Informações</Text>
 
           <View style={styles.cardInfo}>
-
             <Text style={styles.infoText}>
               Idioma Original: {filme?.original_language}
             </Text>
@@ -217,22 +203,15 @@ export default function PageComteudo() {
               Popularidade: {filme?.popularity}
             </Text>
 
-            <Text style={styles.infoText}>
-              Votos: {filme?.vote_count}
-            </Text>
-
+            <Text style={styles.infoText}>Votos: {filme?.vote_count}</Text>
           </View>
-
         </View>
-
       </ScrollView>
-
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-
   safe: {
     flex: 1,
     backgroundColor: "#030d16",
@@ -328,5 +307,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
 });

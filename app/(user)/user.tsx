@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import {
   View,
@@ -16,8 +16,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 
 import { Link, Stack } from "expo-router";
+import { AuthContext } from "@/src/contexts/userContexts";
 
 export default function PerfilPage() {
+  const { usuario, setUsuario } = useContext(AuthContext);
   function sairDoApp() {
     console.log("Usuário saiu");
   }
@@ -67,9 +69,9 @@ export default function PerfilPage() {
           </View>
 
           {/* NOME */}
-          <Text style={styles.nomeUsuario}>Junior</Text>
+          <Text style={styles.nomeUsuario}>{usuario?.nome}</Text>
 
-          <Text style={styles.emailUsuario}>usuario@email.com</Text>
+          <Text style={styles.emailUsuario}>{usuario?.email}</Text>
 
           {/* MENU */}
           <View style={styles.menuContainer}>
