@@ -1,18 +1,18 @@
 import { Ionicons } from "@expo/vector-icons";
 import { View, StyleSheet } from "react-native";
-
+type IconName = keyof typeof Ionicons.glyphMap;
 export default function InconBottonNav({
   stado,
   icon = "help-circle",
 }: {
   stado: boolean;
-  icon?: string;
+  icon?: IconName;
 }) {
   return (
-    <View style={[stado ? [styles.opemPege,styles.box] : styles.closePege]}>
+    <View style={[stado ? [styles.opemPege, styles.box] : styles.closePege]}>
       <Ionicons
-        name={stado ? `${icon}` : `${icon}-outline`}
-        size={28}
+        name={stado ? `${icon}` : `${icon}-outline`as IconName}
+        size={26}
         color="#fff"
       />
     </View>
@@ -21,7 +21,7 @@ export default function InconBottonNav({
 
 const styles = StyleSheet.create({
   box: {
-    shadowColor: "#094e92ff",
+    shadowColor: "#0e65bdff",
     shadowOffset: {
       width: 0,
       height: 8,
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
 
-    backgroundColor: "#1b2631",
+    backgroundColor: "#003870ff",
 
     justifyContent: "center",
     alignItems: "center",
@@ -54,10 +54,14 @@ const styles = StyleSheet.create({
 
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal:7,
+    paddingVertical:7.5,
+    borderTopWidth: 2,
+    borderTopColor: "#0e65bdff",
 
     transform: [
       {
-        translateY: -10,
+        translateY: -5,
       },
     ],
   },

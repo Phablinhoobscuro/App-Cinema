@@ -10,7 +10,7 @@ import {
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Link, Stack, useLocalSearchParams } from "expo-router";
+import { Link, router, Stack, useLocalSearchParams } from "expo-router";
 
 import React, { useContext, useEffect, useState } from "react";
 
@@ -31,15 +31,21 @@ type Categoria = {
 };
 
 type Favoritos = {
-  id: string,
-  filmeId: string,
-  usuarioId: string,
-  dataCriacao: string,
-  dataAtualizacao: string
+  id: string;
+  filmeId: string;
+  usuarioId: string;
+  dataCriacao: string;
+  dataAtualizacao: string;
 };
 
 export default function CategoriaPage() {
   const { usuario, setUsuario } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (!usuario) {
+      router.replace("/");
+    }
+  }, [usuario]);
 
   const headerHeight = useHeaderHeight();
 
@@ -52,14 +58,14 @@ export default function CategoriaPage() {
   async function BuscarListaFavoritos() {
     try {
       const resposta = await apiFilmes.get<Favoritos[]>(
-        `/favoritos/listFavoritosUsuario/${usuario?.id}`
+        `/favoritos/listFavoritosUsuario/${usuario?.id}`,
       );
 
       console.log(resposta.data);
 
       if (resposta.data.length > 0) {
         const listaFilmes = resposta.data.map((favorito) =>
-          BuscarFilme(favorito.filmeId)
+          BuscarFilme(favorito.filmeId),
         );
 
         const filmesData = await Promise.all(listaFilmes);
@@ -67,25 +73,22 @@ export default function CategoriaPage() {
         setFilmes(filmesData.filter(Boolean));
       }
     } catch (error) {
-      console.error(
-        "Erro ao buscar favoritos:",
-        error
-      );
+      console.error("Erro ao buscar favoritos:", error);
     }
   }
 
   async function BuscarFilme(id: string) {
     try {
-      const reposta = await api.get(`/movie/${id}`)
-      return reposta.data
+      const reposta = await api.get(`/movie/${id}`);
+      return reposta.data;
     } catch (error) {
-      return
+      return;
     }
   }
 
   useEffect(() => {
-    BuscarListaFavoritos().then(() => setLoading(false))
-  }, [])
+    BuscarListaFavoritos().then(() => setLoading(false));
+  }, []);
 
   // Loading
   if (loading) {
@@ -106,12 +109,12 @@ export default function CategoriaPage() {
           title: "Favoritos",
 
           headerLeft: () => (
-            <Link href={"./user"} style={{ marginRight: 5 }}>
-              {" "}
-              <TouchableOpacity style={{ marginLeft: 10 }}>
-                <Ionicons name="arrow-back" size={23} color="#fff" />
-              </TouchableOpacity>
-            </Link>
+            <TouchableOpacity
+              style={{ marginLeft: 10 }}
+              onPress={() => router.back()}
+            >
+              <Ionicons name="arrow-back" size={23} color="#fff" />
+            </TouchableOpacity>
           ),
         }}
       />

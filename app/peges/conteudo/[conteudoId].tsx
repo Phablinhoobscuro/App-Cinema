@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Alert,
+  Image
 } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -59,6 +60,8 @@ export default function PageComteudo() {
 
   const [favorito, setFavorito] = useState(false);
 
+  const [providers, setProviders] = useState<any[]>([]);
+
   async function stadoFavorito() {
     try {
       const resposta = await apiFilmes.get<Favorito>(
@@ -105,6 +108,15 @@ export default function PageComteudo() {
         const trailer = videosResponse.data.results.find(
           (video: any) => video.site === "YouTube" && video.type === "Trailer",
         );
+
+        const providersResponse = await api.get(
+          `/movie/${conteudoId}/watch/providers`,
+        );
+
+        const brasilProviders =
+          providersResponse.data.results?.BR?.flatrate || [];
+
+        setProviders(brasilProviders);
 
         if (trailer) {
           setTrailerKey(trailer.key);
@@ -178,6 +190,28 @@ export default function PageComteudo() {
             </View>
           </LinearGradient>
         </ImageBackground>
+        {providers.length > 0 && (
+          <View style={styles.providersContainer}>
+            <Text style={styles.sectionTitle}>Disponível em</Text>
+
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {providers.map((provider) => (
+                <View key={provider.provider_id} style={styles.providerItem}>
+                  <Image
+                    source={{
+                      uri: `https://image.tmdb.org/t/p/w92${provider.logo_path}`,
+                    }}
+                    style={styles.providerLogo}
+                  />
+
+                  <Text style={styles.providerName} numberOfLines={2}>
+                    {provider.provider_name}
+                  </Text>
+                </View>
+              ))}
+            </ScrollView>
+          </View>
+        )}
 
         <View style={styles.content}>
           <Text style={styles.sectionTitle}>Sinopse</Text>
@@ -306,5 +340,29 @@ const styles = StyleSheet.create({
     borderRadius: 26,
     justifyContent: "center",
     alignItems: "center",
+  },
+
+  providersContainer: {
+    paddingHorizontal: 20,
+    marginTop: 15,
+  },
+
+  providerItem: {
+    alignItems: "center",
+    marginRight: 15,
+    width: 75,
+  },
+
+  providerLogo: {
+    width: 55,
+    height: 55,
+    borderRadius: 12,
+  },
+
+  providerName: {
+    color: "#fff",
+    fontSize: 11,
+    marginTop: 5,
+    textAlign: "center",
   },
 });

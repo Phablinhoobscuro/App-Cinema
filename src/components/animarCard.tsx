@@ -1,67 +1,123 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   View,
   StyleSheet,
   Dimensions,
+  Image,
   Text,
-  Image
+  TouchableOpacity,
 } from "react-native";
 
 import Carousel from "react-native-reanimated-carousel";
-import Cartaz from "./cartaz";
-import DataCarousel from "./dataCarousel";
+import { router } from "expo-router";
+
+import api from "../api/api";
+import { Filme } from "../types/types";
 
 const { width } = Dimensions.get("window");
 
-const images = [
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReXH44XS6NTeQCkM-BPsql_odqZZyzBmR9BQ&s",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThqevjJmu1p28SNaN4-1p7ceHPMIe66g2XxA&s",
-  "https://cdn.cineart.com.br/vibezz_526203857.jpg",
-];
-
 export default function AnimarCard() {
+  const [filmes, setFilmes] = useState<Filme[]>([]);
+
+  async function buscaLancamentos() {
+    try {
+      const hoje = new Date();
+
+      const ano = hoje.getFullYear();
+      const mes = hoje.getMonth() + 1;
+
+      const primeiroDia = `${ano}-${String(mes).padStart(2, "0")}-01`;
+
+      const ultimoDia = new Date(ano, mes, 0).getDate();
+
+      const ultimoDiaMes = `${ano}-${String(mes).padStart(
+        2,
+        "0"
+      )}-${String(ultimoDia).padStart(2, "0")}`;
+
+      const resposta = await api.get("/discover/movie", {
+        params: {
+          language: "pt-BR",
+          // sort_by: "primary_release_date.desc",
+          // "primary_release_date.gte": primeiroDia,
+          // "primary_release_date.lte": ultimoDiaMes,
+          page: 1,
+        },
+      });
+
+      setFilmes(resposta.data.results);
+    } catch (error) {
+      console.log("Erro ao buscar lançamentos:", error);
+    }
+  }
+
+  useEffect(() => {
+    buscaLancamentos();
+  }, []);
+
+  function abrirDetalhes(filme: Filme) {
+    router.push({
+      pathname: `./peges/conteudo/${filme.id}`,
+      params: {
+        id: filme.id,
+      },
+    });
+  }
+
   return (
     <View style={styles.container}>
+      <Text style={styles.sectionTitle}>
+        Lançamentos do Mês
+      </Text>
+
       <Carousel
         loop
-
-        width={width * 1}
-        height={600}
-
-        data={images}
-
+        width={width}
+        height={420}
+        data={filmes}
         style={{
-          width: width,
-          padding:0,
-          margin:0,
-          height:560
+          width,
+          height: 400,
         }}
-
         pagingEnabled
         snapEnabled
-
         mode="parallax"
-
         modeConfig={{
           parallaxScrollingScale: 0.85,
-
-          parallaxScrollingOffset: width * 0.40,
+          parallaxScrollingOffset: width * 0.4,
         }}
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            <Image
+              source={{
+                uri: item.backdrop_path
+                  ? `https://image.tmdb.org/t/p/original${item.backdrop_path}`
+                  : `https://image.tmdb.org/t/p/w780${item.poster_path}`,
+              }}
+              style={styles.image}
+              resizeMode="cover"
+            />
 
-        renderItem={({ item }) => <Image
-          source={{
-            uri:  item 
-          }}
+            <View style={styles.overlay}>
+              <Text
+                numberOfLines={2}
+                style={styles.movieTitle}
+              >
+                {item.title}
+              </Text>
 
-          style={{
-            width: "100%",
-            height: "100%",
-            borderRadius: 20,
-          }}
-
-          resizeMode="cover"
-        />}
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => abrirDetalhes(item)}
+              >
+                <Text style={styles.buttonText}>
+                  Ver Detalhes
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
       />
     </View>
   );
@@ -69,17 +125,78 @@ export default function AnimarCard() {
 
 const styles = StyleSheet.create({
   container: {
-    alignSelf: "center",
-    alignItems: "stretch",
-    justifyContent: "center",
-    // width:width,
-    overflow: "visible",
+    marginTop: 15,
+    marginBottom: 20,
+  },
+
+  sectionTitle: {
+    color: "#fff",
+    fontSize: 22,
+    fontWeight: "bold",
+    marginLeft: 15,
+
+    textShadowColor: "rgba(0,0,0,0.8)",
+    textShadowOffset: {
+      width: 1,
+      height: 1,
+    },
+    textShadowRadius: 5,
   },
 
   card: {
     flex: 1,
-    borderRadius: 25,
-    justifyContent: "center",
-    alignItems: "center",
+    borderRadius: 20,
+    overflow: "hidden",
+    marginHorizontal: 10,
+  },
+
+  image: {
+    width: "100%",
+    height: "100%",
+  },
+
+  overlay: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+
+    padding: 20,
+
+    backgroundColor: "rgba(0,0,0,0.65)",
+
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+
+  movieTitle: {
+    color: "#fff",
+    fontSize: 24,
+    fontWeight: "bold",
+
+    textShadowColor: "#000",
+    textShadowOffset: {
+      width: 1,
+      height: 1,
+    },
+    textShadowRadius: 8,
+  },
+
+  button: {
+    marginTop: 12,
+    alignSelf: "flex-start",
+
+    backgroundColor: "#173046",
+
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+
+    borderRadius: 12,
+  },
+
+  buttonText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "bold",
   },
 });

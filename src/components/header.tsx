@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Link } from "expo-router";
-import { View, Image, StyleSheet } from "react-native";
+import { Link, router } from "expo-router";
+import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
 
 export default function Header() {
   return (
@@ -9,9 +9,15 @@ export default function Header() {
         source={require("../../assets/images/icone-filme.png")}
         style={styles.logo}
       />
-      <Link href={"/(user)/user"}>
-        <Ionicons name="settings" size={28} color="#fff" />
-      </Link>
+      {/* <Link href={"/(user)/user"}> */}
+        <TouchableOpacity
+          onPress={() => {
+            router.push("/(user)/user");
+          }}
+        >
+          <Ionicons name="person-circle-outline" size={28} color="#fff" />
+        </TouchableOpacity>
+      {/* </Link> */}
     </View>
   );
 }

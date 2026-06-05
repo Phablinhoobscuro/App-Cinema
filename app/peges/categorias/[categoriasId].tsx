@@ -10,7 +10,7 @@ import {
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Link, Stack, useLocalSearchParams } from "expo-router";
+import { Link, router, Stack, useLocalSearchParams } from "expo-router";
 
 import React, { useEffect, useState } from "react";
 
@@ -94,12 +94,12 @@ export default function CategoriaPage() {
           title: "Categoria",
 
           headerLeft: () => (
-            <Link href={"/catalogo"} style={{marginRight:5}}>
-              {" "}
-              <TouchableOpacity style={{ marginLeft: 10 }}>
+            // <Link href={"/catalogo"} style={{marginRight:5}}>
+              // {" "}
+              <TouchableOpacity style={{ marginLeft: 10 }} onPress={() => router.push("/catalogo")}>
                 <Ionicons name="arrow-back" size={23} color="#fff" />
               </TouchableOpacity>
-            </Link>
+            // </Link>
           ),
         }}
       />

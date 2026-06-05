@@ -122,11 +122,16 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
+    width:40,
+    height:14,
+    alignContent:"center",
+    justifyContent:"center",
   },
 
   btnText: {
     color: "#fff",
     fontWeight: "bold",
+    fontSize:10
   },
 
   /* Painel */
@@ -158,9 +163,9 @@ const styles = StyleSheet.create({
 
   modalTitle: {
     color: "#fff",
-    fontSize: 22,
+    fontSize: 17,
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: 5,
   },
 
   modalDescription: {

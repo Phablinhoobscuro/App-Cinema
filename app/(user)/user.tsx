@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 
 import {
   View,
@@ -15,13 +15,24 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import { Ionicons } from "@expo/vector-icons";
 
-import { Link, Stack } from "expo-router";
+import { Link, router, Stack } from "expo-router";
 import { AuthContext } from "@/src/contexts/userContexts";
 
 export default function PerfilPage() {
   const { usuario, setUsuario } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (!usuario) {
+      router.replace("/");
+    }
+  }, [usuario]);
+  
   function sairDoApp() {
     console.log("Usuário saiu");
+  }
+
+  function voutar() {
+    router.push("/(tabs)");
   }
 
   return (
@@ -34,12 +45,12 @@ export default function PerfilPage() {
           title: "User",
 
           headerLeft: () => (
-            <Link href={"/(tabs)"} style={{ marginRight: 5 }}>
-              {" "}
-              <TouchableOpacity style={{ marginLeft: 10 }}>
-                <Ionicons name="arrow-back" size={23} color="#fff" />
-              </TouchableOpacity>
-            </Link>
+            <TouchableOpacity
+              style={{ marginLeft: 10 }}
+              onPress={() => voutar()}
+            >
+              <Ionicons name="arrow-back" size={23} color="#fff" />
+            </TouchableOpacity>
           ),
         }}
       />
@@ -76,23 +87,27 @@ export default function PerfilPage() {
           {/* MENU */}
           <View style={styles.menuContainer}>
             {/* FAVORITOS */}
-            <Link href="./favoritos" asChild>
-              <TouchableOpacity style={styles.cardMenu} activeOpacity={0.8}>
-                <View style={styles.iconContainer}>
-                  <Ionicons name="heart" size={24} color="#ff3040" />
-                </View>
+            {/* <Link href="./favoritos" asChild> */}
+            <TouchableOpacity
+              style={styles.cardMenu}
+              activeOpacity={0.8}
+              onPress={() => router.push("/favoritos")}
+            >
+              <View style={styles.iconContainer}>
+                <Ionicons name="heart" size={24} color="#ff3040" />
+              </View>
 
-                <View style={styles.textContainer}>
-                  <Text style={styles.menuTitle}>Favoritos</Text>
+              <View style={styles.textContainer}>
+                <Text style={styles.menuTitle}>Favoritos</Text>
 
-                  <Text style={styles.menuSubtitle}>
-                    Veja seus filmes favoritos
-                  </Text>
-                </View>
+                <Text style={styles.menuSubtitle}>
+                  Veja seus filmes favoritos
+                </Text>
+              </View>
 
-                <Ionicons name="chevron-forward" size={22} color="#888" />
-              </TouchableOpacity>
-            </Link>
+              <Ionicons name="chevron-forward" size={22} color="#888" />
+            </TouchableOpacity>
+            {/* </Link> */}
 
             {/* SAIR */}
             <TouchableOpacity

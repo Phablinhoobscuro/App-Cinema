@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
@@ -62,8 +63,14 @@ export default function LoginScreen() {
         end={{ x: 1, y: 1 }}
         style={styles.container}
       >
+        <View style={styles.laiout}>
+          <Image
+            source={require("../assets/images/icone-filme.png")}
+            style={styles.logo}
+          />
+        </View>
+
         <View style={styles.content}>
-          <Text style={styles.title}>CineFlix</Text>
           <Text style={styles.subtitle}>
             Entre para acessar seus filmes favoritos
           </Text>
@@ -111,7 +118,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#030d16",
   },
-
+  laiout: {
+    width: "100%",
+    alignItems: "center",
+  },
+  logo: {
+    width: 150,
+    height: 150,
+    alignSelf: "center",
+    resizeMode: "contain",
+  },
   container: {
     flex: 1,
     justifyContent: "center",

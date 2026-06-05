@@ -8,7 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Categorias } from "@/src/types/types";
 import api from "@/src/api/api";
 import { useEffect, useState } from "react";
-import { Link} from "expo-router";
+import { Link, router } from "expo-router";
 
 export default function Catalogo() {
   const [categorias, setCategorias] = useState<Categorias[]>([]);
@@ -45,11 +45,30 @@ export default function Catalogo() {
         <Text style={styles.categoria}>Categorias</Text>
         <ScrollView showsHorizontalScrollIndicator={false}>
           {categorias?.map((categoria, index) => (
-            <Link key={index} href={`/peges/categorias/${categoria.id}`} asChild>
-              <TouchableOpacity>
-                <Buton text={categoria.name}   color="rgba(255,255,255,0.08)" />
-              </TouchableOpacity>
-            </Link>
+            // <Link key={index} href={`/peges/categorias/${categoria.id}`} asChild>
+            <TouchableOpacity
+              key={index}
+              onPress={() => router.push(`/peges/categorias/${categoria.id}`)}
+              style={{
+                backgroundColor: "rgba(255,255,255,0.08)",
+                paddingHorizontal: 16,
+                paddingVertical: 10,
+                borderRadius: 20,
+                margin:2,
+              }}
+            >
+              <Text
+                style={{
+                  color: "#fff",
+                  fontSize: 14,
+                  fontWeight: "600",
+                  textAlign: "center",
+                }}
+              >
+                {categoria.name}
+              </Text>
+            </TouchableOpacity>
+            // </Link>
           ))}
         </ScrollView>
       </LinearGradient>

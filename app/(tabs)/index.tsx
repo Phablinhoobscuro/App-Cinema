@@ -35,9 +35,11 @@ const width = Dimensions.get("window").width;
 
 export default function HomePage() {
   const [categorias, setCategorias] = useState<Categorias[]>([]);
+  const [categorias2, setCategorias2] = useState<Categorias[]>([]);
   const [lancamentos, setLancamentos] = useState<Filme[]>([]);
 
-  const listaCategorias = [28, 16, 35, 80, 99];
+  const listaCategorias = [28, 16, 35];
+  const listaCategorias2 = [53, 10749, 10402,];
 
   async function lancamentosFilmes() {
     try {
@@ -69,7 +71,12 @@ export default function HomePage() {
         listaCategorias.some((cc) => cc === c.id),
       );
 
+      const categoriasFinais2 = resposta.data.genres.filter((c: any) =>
+        listaCategorias2.some((cc) => cc === c.id),
+      );
+
       setCategorias(categoriasFinais);
+      setCategorias2(categoriasFinais2);
     } catch (error: any) {
       Alert.alert(
         "Erro",
@@ -131,13 +138,14 @@ export default function HomePage() {
               />
             ))}
           <AnimarCard />
-
-          {/* <SectionTema categoria="Drama" />
-          <SectionTema categoria="Series" />
-          <AnimarCard />
-          <SectionTema categoria="Terror" />
-          <SectionTema categoria="Ação" />
-          <SectionTema categoria="Aventura" /> */}
+          {categorias2 &&
+            categorias2.map((element, index) => (
+              <SectionTema
+                key={index}
+                categoria={element.id}
+                nome={element.name}
+              />
+            ))}
         </ScrollView>
       </LinearGradient>
     </SafeAreaView>
