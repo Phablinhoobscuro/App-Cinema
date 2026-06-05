@@ -1,11 +1,11 @@
-import api from "@/src/api/api";
 import Cartaz from "@/src/components/cartaz";
 import Header from "@/src/components/header";
+import api from "@/src/services/api";
 import { Filme } from "@/src/types/types";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
-import { View, TextInput, StyleSheet, Alert } from "react-native";
+import { Alert, StyleSheet, TextInput, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -115,6 +115,6 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "space-between",
     gap: 2,
-    paddingHorizontal:8
+    paddingHorizontal: 8,
   },
 });

@@ -1,14 +1,14 @@
 import {
-  View,
-  Text,
-  StyleSheet,
+  ActivityIndicator,
+  Alert,
+  Dimensions,
+  Image,
   ImageBackground,
   ScrollView,
-  Dimensions,
-  ActivityIndicator,
+  StyleSheet,
+  Text,
   TouchableOpacity,
-  Alert,
-  Image
+  View,
 } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -21,19 +21,19 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { useHeaderHeight } from "@react-navigation/elements";
 
-import api from "@/src/api/api";
+import api from "@/src/services/api";
 
 import { Filme } from "@/src/types/types";
 
-import post_Filme from "@/src/api/api_post_filem";
+import post_Filme from "@/src/services/api_post_filem";
 
 import NivelEstrelas from "@/src/components/nivelEstelas";
 
 import YoutubePlayer from "react-native-youtube-iframe";
 
-import { Ionicons } from "@expo/vector-icons";
-import apiFilmes from "@/src/api/apiFilmes";
 import { AuthContext } from "@/src/contexts/userContexts";
+import apiFilmes from "@/src/services/apiFilmes";
+import { Ionicons } from "@expo/vector-icons";
 
 const { width } = Dimensions.get("window");
 

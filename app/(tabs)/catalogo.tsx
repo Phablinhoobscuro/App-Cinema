@@ -1,14 +1,13 @@
-import Buton from "@/src/components/Buton";
 import Header from "@/src/components/header";
 import { LinearGradient } from "expo-linear-gradient";
-import { View, Text, StyleSheet, Alert, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import api from "@/src/services/api";
 import { Categorias } from "@/src/types/types";
-import api from "@/src/api/api";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Link, router } from "expo-router";
 
 export default function Catalogo() {
   const [categorias, setCategorias] = useState<Categorias[]>([]);
@@ -54,7 +53,7 @@ export default function Catalogo() {
                 paddingHorizontal: 16,
                 paddingVertical: 10,
                 borderRadius: 20,
-                margin:2,
+                margin: 2,
               }}
             >
               <Text

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
-import Cartaz from "./cartaz";
-import api from "../api/api";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import api from "../services/api";
 import { Filme } from "../types/types";
+import Cartaz from "./cartaz";
 
 export default function SectionTema({
   categoria,
@@ -17,7 +17,7 @@ export default function SectionTema({
     try {
       const response = await api.get("/discover/movie", {
         params: {
-          with_genres: categoria ,
+          with_genres: categoria,
           language: "pt-BR",
         },
       });

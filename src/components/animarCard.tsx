@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 
 import {
-  View,
-  StyleSheet,
   Dimensions,
   Image,
+  StyleSheet,
   Text,
   TouchableOpacity,
+  View,
 } from "react-native";
 
-import Carousel from "react-native-reanimated-carousel";
 import { router } from "expo-router";
+import Carousel from "react-native-reanimated-carousel";
 
-import api from "../api/api";
+import api from "../services/api";
 import { Filme } from "../types/types";
 
 const { width } = Dimensions.get("window");
@@ -22,20 +22,6 @@ export default function AnimarCard() {
 
   async function buscaLancamentos() {
     try {
-      const hoje = new Date();
-
-      const ano = hoje.getFullYear();
-      const mes = hoje.getMonth() + 1;
-
-      const primeiroDia = `${ano}-${String(mes).padStart(2, "0")}-01`;
-
-      const ultimoDia = new Date(ano, mes, 0).getDate();
-
-      const ultimoDiaMes = `${ano}-${String(mes).padStart(
-        2,
-        "0"
-      )}-${String(ultimoDia).padStart(2, "0")}`;
-
       const resposta = await api.get("/discover/movie", {
         params: {
           language: "pt-BR",
@@ -67,9 +53,7 @@ export default function AnimarCard() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.sectionTitle}>
-        Lançamentos do Mês
-      </Text>
+      <Text style={styles.sectionTitle}>Lançamentos do Mês</Text>
 
       <Carousel
         loop
@@ -100,10 +84,7 @@ export default function AnimarCard() {
             />
 
             <View style={styles.overlay}>
-              <Text
-                numberOfLines={2}
-                style={styles.movieTitle}
-              >
+              <Text numberOfLines={2} style={styles.movieTitle}>
                 {item.title}
               </Text>
 
@@ -111,9 +92,7 @@ export default function AnimarCard() {
                 style={styles.button}
                 onPress={() => abrirDetalhes(item)}
               >
-                <Text style={styles.buttonText}>
-                  Ver Detalhes
-                </Text>
+                <Text style={styles.buttonText}>Ver Detalhes</Text>
               </TouchableOpacity>
             </View>
           </View>

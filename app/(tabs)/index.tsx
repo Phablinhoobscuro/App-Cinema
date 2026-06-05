@@ -1,13 +1,13 @@
-import api from "@/src/api/api";
 import AnimarCard from "@/src/components/animarCard";
 import Buton from "@/src/components/Buton";
 import DataCarousel from "@/src/components/dataCarousel";
 import Header from "@/src/components/header";
 import SectionTema from "@/src/components/sectionTemas";
+import api from "@/src/services/api";
 import { Categorias, Filme } from "@/src/types/types";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
-import { View, ScrollView, StyleSheet, Dimensions, Alert } from "react-native";
+import { Alert, Dimensions, ScrollView, StyleSheet, View } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -39,7 +39,7 @@ export default function HomePage() {
   const [lancamentos, setLancamentos] = useState<Filme[]>([]);
 
   const listaCategorias = [28, 16, 35];
-  const listaCategorias2 = [53, 10749, 10402,];
+  const listaCategorias2 = [53, 10749, 10402];
 
   async function lancamentosFilmes() {
     try {

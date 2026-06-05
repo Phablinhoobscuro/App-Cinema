@@ -1,18 +1,18 @@
+import { AuthContext, User } from "@/src/contexts/userContexts";
+import apiFilmes from "@/src/services/apiFilmes";
+import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import React, { useContext, useState } from "react";
 import {
-  View,
+  Alert,
+  Image,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-  Alert,
-  Image,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { LinearGradient } from "expo-linear-gradient";
-import { router, Stack } from "expo-router";
-import apiFilmes from "@/src/api/apiFilmes";
-import { AuthContext, User } from "@/src/contexts/userContexts";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");

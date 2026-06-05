@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 
 import {
-  View,
-  StyleSheet,
-  ImageBackground,
-  Text,
-  Dimensions,
-  TouchableOpacity,
   ActivityIndicator,
+  Dimensions,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import { router } from "expo-router";
 
+import post_Filme from "../services/api_post_filem";
 import { Filme } from "../types/types";
-import post_Filme from "../api/api_post_filem";
 
 export default function Cartaz({ filme }: { filme: Filme }) {
   const [loadingImage, setLoadingImage] = useState(true);
@@ -52,9 +52,7 @@ export default function Cartaz({ filme }: { filme: Filme }) {
           onLoadEnd={() => setLoadingImage(false)}
           onError={() => setLoadingImage(false)}
         >
-          <Text style={styles.title}>
-            {filme.original_title}
-          </Text>
+          <Text style={styles.title}>{filme.original_title}</Text>
         </ImageBackground>
       </View>
     </TouchableOpacity>

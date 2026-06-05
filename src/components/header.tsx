@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Link, router } from "expo-router";
+import {router } from "expo-router";
 import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
 
 export default function Header() {

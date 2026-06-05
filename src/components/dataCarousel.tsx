@@ -1,19 +1,15 @@
 import React, { useRef, useState } from "react";
 import {
-  View,
-  Text,
+  Animated,
   ImageBackground,
   StyleSheet,
+  Text,
   TouchableOpacity,
-  Animated,
-  Dimensions,
+  View,
 } from "react-native";
 
+import post_Filme from "../services/api_post_filem";
 import { Filme } from "../types/types";
-import post_Filme from "../api/api_post_filem";
-import { ScrollView } from "react-native-gesture-handler";
-
-const { height } = Dimensions.get("window");
 
 type Props = {
   filme: Filme;
@@ -122,16 +118,16 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
-    width:40,
-    height:14,
-    alignContent:"center",
-    justifyContent:"center",
+    width: 40,
+    height: 14,
+    alignContent: "center",
+    justifyContent: "center",
   },
 
   btnText: {
     color: "#fff",
     fontWeight: "bold",
-    fontSize:10
+    fontSize: 10,
   },
 
   /* Painel */

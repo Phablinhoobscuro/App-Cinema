@@ -1,29 +1,28 @@
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
   ActivityIndicator,
-  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
   TouchableOpacity,
+  View
 } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Link, router, Stack, useLocalSearchParams } from "expo-router";
+import { router, Stack } from "expo-router";
 
 import React, { useContext, useEffect, useState } from "react";
 
 import { useHeaderHeight } from "@react-navigation/elements";
 
-import api from "@/src/api/api";
+import api from "@/src/services/api";
 
 import { Filme } from "@/src/types/types";
 
 import Cartaz from "@/src/components/cartaz";
-import { Ionicons } from "@expo/vector-icons";
-import apiFilmes from "@/src/api/apiFilmes";
 import { AuthContext } from "@/src/contexts/userContexts";
+import apiFilmes from "@/src/services/apiFilmes";
+import { Ionicons } from "@expo/vector-icons";
 
 type Categoria = {
   id: number;

@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import apiFilmes from "@/src/services/apiFilmes";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
-import apiFilmes from "@/src/api/apiFilmes";
+import React, { useState } from "react";
+import {
+    Alert,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CadastroUsuario() {
   const [nome, setNome] = useState("");
@@ -32,18 +32,13 @@ export default function CadastroUsuario() {
         senha,
       });
 
-
-      Alert.alert(
-        "Sucesso",
-        "Usuário cadastrado com sucesso!"
-      );
+      Alert.alert("Sucesso", "Usuário cadastrado com sucesso!");
 
       router.replace("/");
     } catch (error: any) {
       Alert.alert(
         "Erro",
-        error?.response?.data?.message ||
-          "Erro ao cadastrar usuário."
+        error?.response?.data?.message || "Erro ao cadastrar usuário.",
       );
     }
   }
@@ -91,21 +86,12 @@ export default function CadastroUsuario() {
               style={styles.input}
             />
 
-            <TouchableOpacity
-              style={styles.registerButton}
-              onPress={cadastrar}
-            >
-              <Text style={styles.registerText}>
-                Criar Conta
-              </Text>
+            <TouchableOpacity style={styles.registerButton} onPress={cadastrar}>
+              <Text style={styles.registerText}>Criar Conta</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={() => router.back()}
-            >
-              <Text style={styles.loginLink}>
-                Já possui uma conta? Entrar
-              </Text>
+            <TouchableOpacity onPress={() => router.back()}>
+              <Text style={styles.loginLink}>Já possui uma conta? Entrar</Text>
             </TouchableOpacity>
           </View>
         </View>

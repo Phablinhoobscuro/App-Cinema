@@ -1,22 +1,22 @@
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
   ActivityIndicator,
   Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
 } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Link, router, Stack, useLocalSearchParams } from "expo-router";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 
 import React, { useEffect, useState } from "react";
 
 import { useHeaderHeight } from "@react-navigation/elements";
 
-import api from "@/src/api/api";
+import api from "@/src/services/api";
 
 import { Filme } from "@/src/types/types";
 
@@ -95,10 +95,13 @@ export default function CategoriaPage() {
 
           headerLeft: () => (
             // <Link href={"/catalogo"} style={{marginRight:5}}>
-              // {" "}
-              <TouchableOpacity style={{ marginLeft: 10 }} onPress={() => router.push("/catalogo")}>
-                <Ionicons name="arrow-back" size={23} color="#fff" />
-              </TouchableOpacity>
+            // {" "}
+            <TouchableOpacity
+              style={{ marginLeft: 10 }}
+              onPress={() => router.push("/catalogo")}
+            >
+              <Ionicons name="arrow-back" size={23} color="#fff" />
+            </TouchableOpacity>
             // </Link>
           ),
         }}
