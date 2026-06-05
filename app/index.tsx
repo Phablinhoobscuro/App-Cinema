@@ -1,7 +1,13 @@
-import { AuthContext, User } from "@/src/contexts/userContexts";
-import apiFilmes from "@/src/services/apiFilmes";
-import { LinearGradient } from "expo-linear-gradient";
-import { router } from "expo-router";
+/**
+ * Tela de Login
+ * - Responsável por autenticar o usuário e navegar para a área principal (tabs).
+ * - Não altera lógica nem layout, apenas comentários explicativos.
+ */
+
+import { AuthContext, User } from "@/src/contexts/userContexts"; // contexto de autenticação
+import apiFilmes from "@/src/services/apiFilmes"; // serviço API para filmes/usuário
+import { LinearGradient } from "expo-linear-gradient"; // background gradiente
+import { router } from "expo-router"; // navegação
 import React, { useContext, useState } from "react";
 import {
   Alert,
@@ -14,38 +20,48 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+// Componente principal da tela de login
 export default function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  // Estados locais do formulário
+  const [email, setEmail] = useState(""); // e-mail do usuário
+  const [senha, setSenha] = useState(""); // senha do usuário
 
+  // Contexto de autenticação (fornece usuário e setter)
   const { usuario, setUsuario } = useContext(AuthContext);
 
+  // Função que realiza a chamada de login ao back-end
   async function fazerLogin() {
+    // Validação simples: campos obrigatórios
     if (!email || !senha) {
       Alert.alert("Atenção", "Preencha todos os campos.");
       //   router.push("/(tabs)");
       return;
     }
 
+    // Chamada ao endpoint /user/login retornando um User
     const reposta = await apiFilmes.post<User>("/user/login", {
       email,
       senha,
     });
 
+    // Se o backend retornar um id, considera login válido
     if (reposta.data.id) {
       Alert.alert("Login realizado com sucesso!");
+      // Atualiza contexto global com dados do usuário autenticado
       setUsuario({
         id: reposta.data.id,
         nome: reposta.data.nome,
         email: reposta.data.email,
       });
 
+      // Navega para tela principal (tabs)
       router.push("/(tabs)");
     } else {
       Alert.alert("Erro", "E-mail ou senha inválidos.");
     }
   }
 
+  // Handlers auxiliares (recuperação de senha / cadastro)
   function recuperarSenha() {
     Alert.alert("Recuperação de Senha");
   }
@@ -55,6 +71,7 @@ export default function LoginScreen() {
     router.push("/cadastroUser");
   }
 
+  // JSX da tela: SafeAreaView -> LinearGradient -> Conteúdo do formulário
   return (
     <SafeAreaView style={styles.safeArea}>
       <LinearGradient
@@ -63,6 +80,7 @@ export default function LoginScreen() {
         end={{ x: 1, y: 1 }}
         style={styles.container}
       >
+        {/* Logo / topo */}
         <View style={styles.laiout}>
           <Image
             source={require("../assets/images/icone-filme.png")}
@@ -70,12 +88,14 @@ export default function LoginScreen() {
           />
         </View>
 
+        {/* Conteúdo principal com subtítulo e formulário */}
         <View style={styles.content}>
           <Text style={styles.subtitle}>
             Entre para acessar seus filmes favoritos
           </Text>
 
           <View style={styles.form}>
+            {/* Campo de e-mail */}
             <TextInput
               placeholder="E-mail"
               placeholderTextColor="#8FA3B8"
@@ -86,6 +106,7 @@ export default function LoginScreen() {
               style={styles.input}
             />
 
+            {/* Campo de senha */}
             <TextInput
               placeholder="Senha"
               placeholderTextColor="#8FA3B8"
@@ -95,14 +116,17 @@ export default function LoginScreen() {
               style={styles.input}
             />
 
+            {/* Botão de login */}
             <TouchableOpacity style={styles.loginButton} onPress={fazerLogin}>
               <Text style={styles.loginText}>Entrar</Text>
             </TouchableOpacity>
 
+            {/* Links auxiliares */}
             <TouchableOpacity onPress={recuperarSenha}>
               <Text style={styles.linkText}>Esqueci minha senha</Text>
             </TouchableOpacity>
 
+            {/* Botão para navegar ao cadastro */}
             <TouchableOpacity style={styles.registerButton} onPress={cadastrar}>
               <Text style={styles.registerText}>Criar Conta</Text>
             </TouchableOpacity>
@@ -113,6 +137,10 @@ export default function LoginScreen() {
   );
 }
 
+/**
+ * Estilos da tela
+ * - Mantidos sem alteração lógica ou visual, apenas comentários para organização.
+ */
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,

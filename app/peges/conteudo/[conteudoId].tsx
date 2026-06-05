@@ -1,3 +1,9 @@
+/**
+ * Página de conteúdo (detalhes do filme)
+ * - Busca dados do TMDB pela API interna (api)
+ * - Controla estado de loading, favoritos e providers
+ * - Mantém a renderização do layout original; adicionados comentários explicativos
+ */
 import {
   ActivityIndicator,
   Alert,
@@ -46,22 +52,27 @@ type Favorito = {
 };
 
 export default function PageComteudo() {
+  // Contexto de autenticação para obter usuário atual
   const { usuario, setUsuario } = useContext(AuthContext);
 
+  // Obtém parâmetro dinâmico da rota (conteudoId)
   const { conteudoId } = useLocalSearchParams();
 
+  // Altura do header usada para ajustar o banner
   const headerHeight = useHeaderHeight();
 
+  // Estados locais: filme, loading, trailer, favorito e providers
   const [filme, setFilme] = useState<Filme | null>(null);
-
   const [loading, setLoading] = useState(true);
-
   const [trailerKey, setTrailerKey] = useState("");
-
   const [favorito, setFavorito] = useState(false);
-
   const [providers, setProviders] = useState<any[]>([]);
 
+  /**
+   * Verifica se o filme já é favorito do usuário
+   * - Chama endpoint /favoritos/:usuarioId/:conteudoId
+   * - Ajusta estado `favorito` caso exista registro
+   */
   async function stadoFavorito() {
     try {
       const resposta = await apiFilmes.get<Favorito>(
@@ -71,10 +82,15 @@ export default function PageComteudo() {
         setFavorito(true);
       }
     } catch (e) {
+      // Falha silenciosa: não bloqueia a renderização
       return;
     }
   }
 
+  /**
+   * Adiciona/remova favorito via API
+   * - Faz POST para criar favorito e atualiza estado local
+   */
   async function addFavoritos() {
     try {
       const resposta = await apiFilmes.post("/favoritos", {
@@ -89,10 +105,12 @@ export default function PageComteudo() {
       Alert.alert("Erro", e.response?.data?.message || e.message);
     }
   }
+
+  // Efeito principal que busca detalhes do filme, vídeos e providers
   useEffect(() => {
     async function buscarFilme() {
       try {
-        // Buscar detalhes do filme
+        // Busca detalhes do filme (idioma pt-BR)
         const response = await api.get(`/movie/${conteudoId}`, {
           params: {
             language: "pt-BR",
@@ -101,14 +119,15 @@ export default function PageComteudo() {
 
         setFilme(response.data);
 
-        // Buscar vídeos/trailers
+        // Busca vídeos/trailers associados ao filme
         const videosResponse = await api.get(`/movie/${conteudoId}/videos`);
 
-        // Procurar trailer oficial do YouTube
+        // Localiza trailer oficial no YouTube
         const trailer = videosResponse.data.results.find(
           (video: any) => video.site === "YouTube" && video.type === "Trailer",
         );
 
+        // Busca provedores de streaming por país
         const providersResponse = await api.get(
           `/movie/${conteudoId}/watch/providers`,
         );
@@ -124,14 +143,18 @@ export default function PageComteudo() {
       } catch (erro) {
         console.log(erro);
       } finally {
+        // Sempre remove o estado de loading ao final
         setLoading(false);
       }
     }
 
+    // Executa buscas e verifica estado de favorito
     buscarFilme();
     stadoFavorito();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conteudoId]);
 
+  // Enquanto carrega, mostra indicador de progresso
   if (loading) {
     return (
       <SafeAreaView style={styles.loadingContainer}>
@@ -140,6 +163,7 @@ export default function PageComteudo() {
     );
   }
 
+  // JSX: detalhamento do filme com banner, providers, sinopse e trailer
   return (
     <SafeAreaView style={styles.safe}>
       <Stack.Screen
@@ -152,6 +176,7 @@ export default function PageComteudo() {
       />
 
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+        {/* Banner com imagem de fundo e informações principais */}
         <ImageBackground
           source={{
             uri: filme?.backdrop_path
@@ -161,7 +186,7 @@ export default function PageComteudo() {
           resizeMode="cover"
           style={[styles.banner, { paddingTop: headerHeight }]}
         >
-          {/* BOTÃO FAVORITO */}
+          {/* Botão de favorito no topo do banner */}
           <TouchableOpacity
             style={styles.favoriteButton}
             onPress={() => addFavoritos()}
@@ -190,6 +215,8 @@ export default function PageComteudo() {
             </View>
           </LinearGradient>
         </ImageBackground>
+
+        {/* Lista de provedores onde o conteúdo está disponível */}
         {providers.length > 0 && (
           <View style={styles.providersContainer}>
             <Text style={styles.sectionTitle}>Disponível em</Text>
@@ -213,6 +240,7 @@ export default function PageComteudo() {
           </View>
         )}
 
+        {/* Conteúdo: sinopse, trailer e informações adicionais */}
         <View style={styles.content}>
           <Text style={styles.sectionTitle}>Sinopse</Text>
 

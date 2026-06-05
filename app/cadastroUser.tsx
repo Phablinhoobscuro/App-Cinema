@@ -1,22 +1,35 @@
+/**
+ * Tela de cadastro de usuário
+ * - Realiza validações simples de formulário.
+ * - Chama API para criar usuário e navega após sucesso.
+ * - Não altera lógica ou layout, apenas comentários explicativos.
+ */
 import apiFilmes from "@/src/services/apiFilmes";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
-    Alert,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CadastroUsuario() {
+  // Estados do formulário
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
+  /**
+   * Função que envia os dados para o backend e trata resultado
+   * - Valida campos obrigatórios
+   * - Faz POST /user
+   * - Em caso de sucesso navega para a tela de login
+   */
   async function cadastrar() {
     if (!nome || !email || !senha) {
       Alert.alert("Atenção", "Preencha todos os campos.");
@@ -24,8 +37,7 @@ export default function CadastroUsuario() {
     }
 
     try {
-      // Exemplo da chamada para API
-
+      // Chamada à API para criar usuário
       await apiFilmes.post("/user", {
         nome,
         email,
@@ -34,8 +46,10 @@ export default function CadastroUsuario() {
 
       Alert.alert("Sucesso", "Usuário cadastrado com sucesso!");
 
+      // Substitui a rota atual pela tela de login
       router.replace("/");
     } catch (error: any) {
+      // Mostra mensagem de erro vinda do backend ou genérica
       Alert.alert(
         "Erro",
         error?.response?.data?.message || "Erro ao cadastrar usuário.",
@@ -43,6 +57,7 @@ export default function CadastroUsuario() {
     }
   }
 
+  // JSX: layout com LinearGradient, formulário e botões
   return (
     <SafeAreaView style={styles.safeArea}>
       <LinearGradient
@@ -59,6 +74,7 @@ export default function CadastroUsuario() {
           </Text>
 
           <View style={styles.form}>
+            {/* Campo nome */}
             <TextInput
               placeholder="Nome completo"
               placeholderTextColor="#8FA3B8"
@@ -67,6 +83,7 @@ export default function CadastroUsuario() {
               style={styles.input}
             />
 
+            {/* Campo e-mail */}
             <TextInput
               placeholder="E-mail"
               placeholderTextColor="#8FA3B8"
@@ -77,6 +94,7 @@ export default function CadastroUsuario() {
               style={styles.input}
             />
 
+            {/* Campo senha */}
             <TextInput
               placeholder="Senha"
               placeholderTextColor="#8FA3B8"
@@ -86,10 +104,12 @@ export default function CadastroUsuario() {
               style={styles.input}
             />
 
+            {/* Botão de cadastro */}
             <TouchableOpacity style={styles.registerButton} onPress={cadastrar}>
               <Text style={styles.registerText}>Criar Conta</Text>
             </TouchableOpacity>
 
+            {/* Link para voltar ao login */}
             <TouchableOpacity onPress={() => router.back()}>
               <Text style={styles.loginLink}>Já possui uma conta? Entrar</Text>
             </TouchableOpacity>
