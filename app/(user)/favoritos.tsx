@@ -12,7 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Link, Stack, useLocalSearchParams } from "expo-router";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { useHeaderHeight } from "@react-navigation/elements";
 
@@ -23,6 +23,7 @@ import { Filme } from "@/src/types/types";
 import Cartaz from "@/src/components/cartaz";
 import { Ionicons } from "@expo/vector-icons";
 import apiFilmes from "@/src/api/apiFilmes";
+import { AuthContext } from "@/src/contexts/userContexts";
 
 type Categoria = {
   id: number;
@@ -30,12 +31,12 @@ type Categoria = {
 };
 
 type Favoritos = {
-    id: string,
-    filmeId: string,
-    usuarioId: string,
-    dataCriacao: string,
-    dataAtualizacao: string
-  };
+  id: string,
+  filmeId: string,
+  usuarioId: string,
+  dataCriacao: string,
+  dataAtualizacao: string
+};
 
 export default function CategoriaPage() {
   const { usuario, setUsuario } = useContext(AuthContext);
@@ -50,18 +51,30 @@ export default function CategoriaPage() {
 
   async function BuscarListaFavoritos() {
     try {
-      const resposta = await apiFilmes.get<Favoritos[]>(`/favoritos/listFavoritosUsuario/${usuario.id}`);
+      const resposta = await apiFilmes.get<Favoritos[]>(
+        `/favoritos/listFavoritosUsuario/${usuario?.id}`
+      );
 
-      if(resposta.data.length > 0){
-        resposta.data.map(()=)
-        setFilmes()
+      console.log(resposta.data);
+
+      if (resposta.data.length > 0) {
+        const listaFilmes = resposta.data.map((favorito) =>
+          BuscarFilme(favorito.filmeId)
+        );
+
+        const filmesData = await Promise.all(listaFilmes);
+
+        setFilmes(filmesData.filter(Boolean));
       }
     } catch (error) {
-      
+      console.error(
+        "Erro ao buscar favoritos:",
+        error
+      );
     }
   }
 
-  async function BuscarFilme(id:string) {
+  async function BuscarFilme(id: string) {
     try {
       const reposta = await api.get(`/movie/${id}`)
       return reposta.data
@@ -69,9 +82,10 @@ export default function CategoriaPage() {
       return
     }
   }
-  useEffect(()=>{
-     
-  },[])
+
+  useEffect(() => {
+    BuscarListaFavoritos().then(() => setLoading(false))
+  }, [])
 
   // Loading
   if (loading) {
