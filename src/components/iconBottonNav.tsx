@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 type IconName = keyof typeof Ionicons.glyphMap;
 export default function InconBottonNav({
   stado,
@@ -21,7 +21,7 @@ export default function InconBottonNav({
 
 const styles = StyleSheet.create({
   box: {
-    shadowColor: "#0e65bdff",
+    shadowColor: "rgb(18, 95, 172)",
     shadowOffset: {
       width: 0,
       height: 8,

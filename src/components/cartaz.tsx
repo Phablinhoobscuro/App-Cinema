@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import {
   ActivityIndicator,
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
 
   loadingContainer: {
     flex: 1,
-    backgroundColor: "#030d16",
+    backgroundColor: "#060f16",
     justifyContent: "center",
     alignItems: "center",
   },

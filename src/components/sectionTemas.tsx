@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import api from "../services/api";
 import { Filme } from "../types/types";
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
 
   textLabel: {
     fontSize: 18,
-    color: "#fff",
+    color: "#eeeded",
     marginBottom: 10,
     fontWeight: "bold",
   },

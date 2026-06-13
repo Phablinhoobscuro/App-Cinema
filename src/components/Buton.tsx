@@ -1,8 +1,8 @@
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 export default function buttonCategoria({
   text,
-  color = "#ff0000",
+  color = "#df0202",
 }: {
   text: string;
   color?: string;
