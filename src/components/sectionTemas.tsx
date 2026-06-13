@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
 
   textLabel: {
     fontSize: 18,
-    color: "#eeeded",
+    color: "#fcfbfb",
     marginBottom: 10,
     fontWeight: "bold",
   },
